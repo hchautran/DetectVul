@@ -1,0 +1,85 @@
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,579); %set diagram left start at 0, and has height of 579
+
+%Straight Lines [id:da40486194850629165] 
+\draw    (350.33,84.44) -- (350.18,110.31) ;
+\draw [shift={(350.17,113.31)}, rotate = 270.33] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da3558101395642197] 
+\draw    (350.11,189.33) -- (349.91,225.89) ;
+\draw [shift={(349.89,228.89)}, rotate = 270.32] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da1153108036201882] 
+\draw    (350,257.83) -- (350,277.58) ;
+\draw [shift={(350,280.58)}, rotate = 270] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da9689031534825849] 
+\draw    (339.44,306.22) -- (305.73,336.58) ;
+\draw [shift={(303.5,338.58)}, rotate = 318] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da36506589920381805] 
+\draw    (361.67,306.22) -- (395.82,338.52) ;
+\draw [shift={(398,340.58)}, rotate = 223.4] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da5712758559994653] 
+\draw    (275,364.22) -- (275.05,397.36) ;
+\draw [shift={(275.06,400.36)}, rotate = 269.91] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+% Text Node
+\draw  [fill={rgb, 255:red, 232; green, 255; blue, 207 }  ,fill opacity=1 ]  (349.5, 71.46) circle [x radius= 74.25, y radius= 12.73]   ;
+\draw (349.5,71.46) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{71.4pt}\setlength\topsep{0pt}
+\begin{center}
+{\fontfamily{pcr}\selectfont def FUNC\_1(self):}
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 215; blue, 220 }  ,fill opacity=1 ]  (351.42, 151.67) circle [x radius= 151.32, y radius= 37.48]   ;
+\draw (351.42,151.67) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{145.41pt}\setlength\topsep{0pt}
+\begin{center}
+{\fontfamily{pcr}\selectfont VAR\_9 = ( \ \ }\\{\fontfamily{pcr}\selectfont  \ "select count(*) from users where 		name=\textbackslash '\%s\textbackslash ' and password=\textbackslash '\%s\textbackslash ';"\% (self.name, self.password))}
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 215; blue, 220 }  ,fill opacity=1 ]  (357, 245) circle [x radius= 158.39, y radius= 15.56]   ;
+\draw (357,245) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{152.32pt}\setlength\topsep{0pt}
+\begin{center}
+{\fontfamily{pcr}\selectfont VAR\_10 = sql.queryDB(self.conn,VAR\_9)}
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 232; green, 255; blue, 207 }  ,fill opacity=1 ]  (275.95, 350.62) circle [x radius= 50.2, y radius= 14.14]   ;
+\draw (275.95,350.62) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{48.21pt}\setlength\topsep{0pt}
+\begin{center}
+{\fontfamily{pcr}\selectfont  self.clean()}
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 232; green, 255; blue, 207 }  ,fill opacity=1 ]  (424.42, 352.65) circle [x radius= 52.33, y radius= 13.44]   ;
+\draw (424.42,352.65) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{50.58pt}\setlength\topsep{0pt}
+\begin{center}
+{\fontfamily{pcr}\selectfont return False}
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 232; green, 255; blue, 207 }  ,fill opacity=1 ]  (349.83, 293.42) circle [x radius= 100.41, y radius= 12.73]   ;
+\draw (349.83,293.42) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{96.79pt}\setlength\topsep{0pt}
+\begin{center}
+{\fontfamily{pcr}\selectfont VAR\_11 = VAR\_10[0][0]}
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 232; green, 255; blue, 207 }  ,fill opacity=1 ]  (275.78, 413.1) circle [x radius= 56.57, y radius= 12.73]   ;
+\draw (275.78,413.1) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{54.25pt}\setlength\topsep{0pt}
+\begin{center}
+{\fontfamily{pcr}\selectfont return True}
+\end{center}
+
+\end{minipage}};
+
+
+\end{tikzpicture}

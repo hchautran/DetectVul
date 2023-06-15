@@ -1,0 +1,131 @@
+digraph clusterglobal {
+	graph [label=global]
+	1 [label="q = float(input('q = '))
+"]
+	2 [label="r = float(input('r = '))
+"]
+	3 [label="d = q ** 2 + 4 * r
+"]
+	4 [label="if d >= 0:
+"]
+	5 [label="print('The sequence will not oscillate')
+"]
+	14 [label="if abs((q + q ** (1 / 2)) / 2) < 1 and abs((q - d ** (1 / 2)) / 2) < 1:
+"]
+	15 [label="print('The sequence will converge to zero')
+"]
+	6 [label="n = int(input('Enter the number of y-terms to be computed: '))
+"]
+	20 [label="while n <= 0:
+"]
+	21 [label="n = int(input('Enter the number of y-terms (greater than 0) to be computed: '))
+"]
+	21 -> 20 [label=""]
+	20 -> 21 [label="n <= 0"]
+	22 [label="curr_y = 3
+"]
+	24 [label="pre_y = 4
+"]
+	25 [label="for i in range(n):
+"]
+	26 [label="temp = curr_y
+"]
+	28 [label="curr_y = q * curr_y + r * pre_y
+"]
+	29 [label="pre_y = temp
+"]
+	29 -> 25 [label=""]
+	28 -> 29 [label=""]
+	26 -> 28 [label=""]
+	25 -> 26 [label="range(n)"]
+	27 [label="print('y = {0:.3f}'.format(curr_y))
+"]
+	31 [label="import math
+"]
+	32 [label="model_type = input('Enter model type (linear, power, exponential): ')
+"]
+	33 [label="if model_type != 'linear' and model_type != 'power' and model_type != 'exponential':
+"]
+	34 [label="print('The model type is invalid!!!')
+"]
+	33 -> 34 [label="model_type != 'linear' and model_type != 'power' and model_type != 'exponential'"]
+	36 [label="x1 = float(input('x1 = '))
+"]
+	37 [label="y1 = float(input('y1 = '))
+"]
+	38 [label="x2 = float(input('x2 = '))
+"]
+	39 [label="y2 = float(input('y2 = '))
+"]
+	40 [label="if model_type == 'linear':
+"]
+	41 [label="m = (y2 - y1) / (x2 - x1)
+"]
+	53 [label="b = y1 - m * x1
+"]
+	54 [label="print('y = {0:.4f}x + {1:.4f}'.format(m, b))
+"]
+	53 -> 54 [label=""]
+	41 -> 53 [label=""]
+	40 -> 41 [label="model_type == 'linear'"]
+	43 [label="if model_type == 'power':
+"]
+	44 [label="m = (math.log10(y2) - math.log10(y1)) / (math.log10(x2) - math.log10(x1))
+"]
+	50 [label="b = 10 ** (math.log10(y1) - m * math.log10(x1))
+"]
+	51 [label="print('y = {1:.4f}x^{0:.4f}'.format(m, b))
+"]
+	50 -> 51 [label=""]
+	44 -> 50 [label=""]
+	43 -> 44 [label="model_type == 'power'"]
+	46 [label="m = (math.log(y2) - math.log(y1)) / (x2 - x1)
+"]
+	47 [label="b = math.exp(math.log(y1) - m * x1)
+"]
+	48 [label="print('y = {1:.4f}e^({0:.4f}x)'.format(m, b))
+"]
+	47 -> 48 [label=""]
+	46 -> 47 [label=""]
+	43 -> 46 [label="(model_type != 'power')"]
+	40 -> 43 [label="(model_type != 'linear')"]
+	39 -> 40 [label=""]
+	38 -> 39 [label=""]
+	37 -> 38 [label=""]
+	36 -> 37 [label=""]
+	33 -> 36 [label="(not (model_type != 'linear' and model_type != 'power' and model_type !=
+    'exponential'))"]
+	32 -> 33 [label=""]
+	31 -> 32 [label=""]
+	27 -> 31 [label=""]
+	25 -> 27 [label=""]
+	24 -> 25 [label=""]
+	22 -> 24 [label=""]
+	20 -> 22 [label="(n > 0)"]
+	6 -> 20 [label=""]
+	15 -> 6 [label=""]
+	14 -> 15 [label="abs((q + q ** (1 / 2)) / 2) < 1 and abs((q - d ** (1 / 2)) / 2) < 1"]
+	17 [label="print('The sequence does not converge to zero')
+"]
+	17 -> 6 [label=""]
+	14 -> 17 [label="(not (abs((q + q ** (1 / 2)) / 2) < 1 and abs((q - d ** (1 / 2)) / 2) < 1))"]
+	5 -> 14 [label=""]
+	4 -> 5 [label="d >= 0"]
+	7 [label="print('The sequence will oscillate')
+"]
+	8 [label="if abs(r) < 1:
+"]
+	9 [label="print('The sequence will converge to zero')
+"]
+	9 -> 6 [label=""]
+	8 -> 9 [label="abs(r) < 1"]
+	11 [label="print('The sequence does not converge to zero')
+"]
+	11 -> 6 [label=""]
+	8 -> 11 [label="(abs(r) >= 1)"]
+	7 -> 8 [label=""]
+	4 -> 7 [label="(d < 0)"]
+	3 -> 4 [label=""]
+	2 -> 3 [label=""]
+	1 -> 2 [label=""]
+}

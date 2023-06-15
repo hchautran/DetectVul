@@ -1,0 +1,151 @@
+digraph clusterglobal {
+	graph [label=global]
+	1 [label="VAR_0 = float(input('q = '))
+"]
+	2 [label="VAR_1 = float(input('r = '))
+"]
+	3 [label="VAR_2 = VAR_0 ** 2 + 4 * VAR_1
+"]
+	4 [label="if VAR_2 >= 0:
+"]
+	5 [label="print('The sequence will not oscillate')
+"]
+	14 [label="if abs((VAR_0 + VAR_0 ** (1 / 2)) / 2) < 1 and abs((VAR_0 - VAR_2 ** (1 / 2
+"]
+	15 [label="print('The sequence will converge to zero')
+"]
+	6 [label="VAR_3 = int(input('Enter the number of y-terms to be computed: '))
+"]
+	20 [label="while VAR_3 <= 0:
+"]
+	21 [label="VAR_3 = int(input(
+    'Enter the number of y-terms (greater than 0) to be computed: '))
+"]
+	21 -> 20 [label=""]
+	20 -> 21 [label="VAR_3 <= 0"]
+	22 [label="VAR_4 = 3
+"]
+	24 [label="VAR_5 = 4
+"]
+	25 [label="for i in range(VAR_3):
+"]
+	26 [label="VAR_7 = VAR_4
+"]
+	28 [label="VAR_4 = VAR_0 * VAR_4 + VAR_1 * VAR_5
+"]
+	29 [label="VAR_5 = VAR_7
+"]
+	29 -> 25 [label=""]
+	28 -> 29 [label=""]
+	26 -> 28 [label=""]
+	25 -> 26 [label="range(VAR_3)"]
+	27 [label="print('y = {0:.3f}'.format(VAR_4))
+"]
+	31 [label="import math
+"]
+	32 [label="VAR_6 = input('Enter model type (linear, power, exponential): ')
+"]
+	33 [label="if VAR_6 != 'linear' and VAR_6 != 'power' and VAR_6 != 'exponential':
+"]
+	34 [label="print('The model type is invalid!!!')
+"]
+	33 -> 34 [label="VAR_6 != 'linear' and VAR_6 != 'power' and VAR_6 != 'exponential'"]
+	36 [label="VAR_8 = float(input('x1 = '))
+"]
+	37 [label="VAR_9 = float(input('y1 = '))
+"]
+	38 [label="VAR_10 = float(input('x2 = '))
+"]
+	39 [label="VAR_11 = float(input('y2 = '))
+"]
+	41 [label="print('hello world')
+"]
+	46 [label="VAR_12 = 1
+"]
+	47 [label="VAR_13 = 1
+"]
+	48 [label="VAR_14 = VAR_12 + VAR_13
+"]
+	43 [label="if VAR_6 == 'linear':
+"]
+	50 [label="VAR_15 = (VAR_11 - VAR_9) / (VAR_10 - VAR_8)
+"]
+	62 [label="VAR_13 = VAR_9 - VAR_15 * VAR_8
+"]
+	63 [label="print('y = {0:.4f}x + {1:.4f}'.format(VAR_15, VAR_13))
+"]
+	62 -> 63 [label=""]
+	50 -> 62 [label=""]
+	43 -> 50 [label="VAR_6 == 'linear'"]
+	52 [label="if VAR_6 == 'power':
+"]
+	53 [label="VAR_15 = (math.log10(VAR_11) - math.log10(VAR_9)) / (math.log10(VAR_10) -
+    math.log10(VAR_8))
+"]
+	59 [label="VAR_13 = 10 ** (math.log10(VAR_9) - VAR_15 * math.log10(VAR_8))
+"]
+	60 [label="print('y = {1:.4f}x^{0:.4f}'.format(VAR_15, VAR_13))
+"]
+	59 -> 60 [label=""]
+	53 -> 59 [label=""]
+	52 -> 53 [label="VAR_6 == 'power'"]
+	55 [label="VAR_15 = (math.log(VAR_11) - math.log(VAR_9)) / (VAR_10 - VAR_8)
+"]
+	56 [label="VAR_13 = math.exp(math.log(VAR_9) - VAR_15 * VAR_8)
+"]
+	57 [label="print('y = {1:.4f}e^({0:.4f}x)'.format(VAR_15, VAR_13))
+"]
+	56 -> 57 [label=""]
+	55 -> 56 [label=""]
+	52 -> 55 [label="(model_type != 'power')"]
+	43 -> 52 [label="(model_type != 'linear')"]
+	48 -> 43 [label=""]
+	47 -> 48 [label=""]
+	46 -> 47 [label=""]
+	41 -> 46 [label=""]
+	39 -> 41 [label=""]
+	42 [label="print(error)
+"]
+	42 -> 43 [label=""]
+	39 -> 42 [label=""]
+	39 -> 43 [label=""]
+	38 -> 39 [label=""]
+	37 -> 38 [label=""]
+	36 -> 37 [label=""]
+	33 -> 36 [label="(not (VAR_6 != 'linear' and VAR_6 != 'power' and VAR_6 != 'exponential'))"]
+	32 -> 33 [label=""]
+	31 -> 32 [label=""]
+	27 -> 31 [label=""]
+	25 -> 27 [label=""]
+	24 -> 25 [label=""]
+	22 -> 24 [label=""]
+	20 -> 22 [label="(n > 0)"]
+	6 -> 20 [label=""]
+	15 -> 6 [label=""]
+	14 -> 15 [label="abs((VAR_0 + VAR_0 ** (1 / 2)) / 2) < 1 and abs((VAR_0 - VAR_2 ** (1 / 2)) / 2
+    ) < 1"]
+	17 [label="print('The sequence does not converge to zero')
+"]
+	17 -> 6 [label=""]
+	14 -> 17 [label="(not (abs((VAR_0 + VAR_0 ** (1 / 2)) / 2) < 1 and abs((VAR_0 - VAR_2 ** (1 /
+    2)) / 2) < 1))"]
+	5 -> 14 [label=""]
+	4 -> 5 [label="VAR_2 >= 0"]
+	7 [label="print('The sequence will oscillate')
+"]
+	8 [label="if abs(VAR_1) < 1:
+"]
+	9 [label="print('The sequence will converge to zero')
+"]
+	9 -> 6 [label=""]
+	8 -> 9 [label="abs(VAR_1) < 1"]
+	11 [label="print('The sequence does not converge to zero')
+"]
+	11 -> 6 [label=""]
+	8 -> 11 [label="(abs(VAR_1) >= 1)"]
+	7 -> 8 [label=""]
+	4 -> 7 [label="(d < 0)"]
+	3 -> 4 [label=""]
+	2 -> 3 [label=""]
+	1 -> 2 [label=""]
+}

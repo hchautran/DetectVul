@@ -1,0 +1,30 @@
+[
+  {
+      "url": "trang cua cwe",
+      "name_cwe": "nay la loi 1",
+      "confident": 0.2,
+      "begin_line": 3,
+      "end_line": 5
+  }, 
+  {
+      "url": "trang cua cwe",
+      "name_cwe": "nay la loi 2",
+      "confident": 0.75,
+      "begin_line": 20,
+      "end_line": 25
+  }, 
+  {
+      "url": "trang cua cwe",
+      "name_cwe": "nay la loi 3",
+      "confident": 1,
+      "begin_line": 30,
+      "end_line": 40
+  }, 
+  {
+    "url": "trang cua cwe",
+    "name_cwe": "nay la loi 4",
+    "confident": 0.30,
+    "begin_line": 8,
+    "end_line": 16
+  }
+]

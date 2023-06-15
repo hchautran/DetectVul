@@ -1,0 +1,8 @@
+numpy
+pandas
+transformers
+tokenizers
+datasets
+accelerate
+torch
+sentence_transformers

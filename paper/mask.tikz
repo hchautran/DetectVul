@@ -1,0 +1,307 @@
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,428); %set diagram left start at 0, and has height of 428
+
+%Straight Lines [id:da5087261800400087] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (198.82,220.29) -- (198.82,328.02) ;
+%Straight Lines [id:da5857833771007241] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (220.99,218.53) -- (220.99,326.26) ;
+%Straight Lines [id:da9472442742855178] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (243.71,219.41) -- (243.71,327.14) ;
+%Straight Lines [id:da2204757183687085] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.34 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (266.16,220.29) -- (266.16,328.02) ;
+%Straight Lines [id:da07267914367001382] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (288.04,219.85) -- (288.04,327.58) ;
+%Straight Lines [id:da871368522741403] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.39 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (310.49,218.97) -- (310.49,326.7) ;
+%Straight Lines [id:da6242406751394045] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (332.65,219.41) -- (332.65,327.14) ;
+%Straight Lines [id:da08385924513971799] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (355.38,218.97) -- (355.38,275.47) -- (355.38,326.7) ;
+%Straight Lines [id:da9397017332557853] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.38 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (377.55,217.65) -- (378.11,275.04) -- (378.11,326.26) ;
+%Straight Lines [id:da11871289998091594] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (199.38,219.85) -- (221.55,325.82) ;
+%Straight Lines [id:da41102356081521974] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (220.99,218.53) -- (243.71,327.14) ;
+%Straight Lines [id:da2540328755628076] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.34 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (243.71,219.41) -- (265.88,325.39) ;
+%Straight Lines [id:da08355083937039653] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (266.16,220.29) -- (288.32,326.26) ;
+%Straight Lines [id:da9283564955752959] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.39 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (288.32,220.73) -- (310.49,326.7) ;
+%Straight Lines [id:da867176907697975] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (310.49,221.17) -- (332.65,327.14) ;
+%Straight Lines [id:da7853074042913364] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (333.22,220.73) -- (355.38,326.7) ;
+%Straight Lines [id:da30815832041450086] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.38 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (355.94,220.29) -- (378.11,326.26) ;
+%Straight Lines [id:da48960816615027136] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (220.99,218.53) -- (198.82,328.02) ;
+%Straight Lines [id:da748254245249069] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (243.71,219.41) -- (220.99,326.26) ;
+%Straight Lines [id:da9276037438184228] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (266.44,220.29) -- (243.71,327.14) ;
+%Straight Lines [id:da2637766681074263] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.34 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (288.61,218.53) -- (265.88,325.39) ;
+%Straight Lines [id:da595028187443386] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (310.77,220.73) -- (288.04,327.58) ;
+%Straight Lines [id:da5758668522929971] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.39 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (332.93,220.73) -- (327.7,245.33) -- (310.21,327.58) ;
+%Straight Lines [id:da3335663519598737] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (355.38,220.29) -- (332.65,327.14) ;
+%Straight Lines [id:da1064803438688422] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (377.55,217.65) -- (355.38,326.7) ;
+%Straight Lines [id:da20173758152649346] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.38 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (399.99,218.53) -- (378.11,327.58) ;
+%Straight Lines [id:da45671014303975355] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (378.11,218.53) -- (400.13,326.04) ;
+%Straight Lines [id:da4984088208739019] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (198.82,220.29) -- (243.71,327.14) ;
+%Straight Lines [id:da13306238196157394] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.34 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (221.27,221.17) -- (266.16,328.02) ;
+%Straight Lines [id:da4657337864585054] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (243.15,220.73) -- (288.04,327.58) ;
+%Straight Lines [id:da47061898434255633] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.39 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (265.6,219.85) -- (310.49,326.7) ;
+%Straight Lines [id:da10957027380370876] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (287.76,220.29) -- (332.65,327.14) ;
+%Straight Lines [id:da1563269255921742] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (310.77,220.73) -- (355.66,327.58) ;
+%Straight Lines [id:da4379498083520035] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.38 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (333.22,220.73) -- (378.11,327.58) ;
+%Straight Lines [id:da609792562207087] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (355.38,220.29) -- (400.27,327.14) ;
+%Straight Lines [id:da994309672411454] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.34 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (198.96,221.17) -- (266.02,326.26) ;
+%Straight Lines [id:da3485360423397925] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (221.27,221.17) -- (288.04,327.58) ;
+%Straight Lines [id:da5861115687176264] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.39 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (243.97,222.27) -- (310.21,327.58) ;
+%Straight Lines [id:da16651104650157134] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (266.44,220.29) -- (332.65,327.14) ;
+%Straight Lines [id:da11945946619315384] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (288.89,221.17) -- (355.66,327.58) ;
+%Straight Lines [id:da0865328470600617] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.38 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (310.49,221.17) -- (377.55,326.26) ;
+%Straight Lines [id:da32948653256403215] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (333.22,222.05) -- (400.27,327.14) ;
+%Straight Lines [id:da40142239850957817] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (198.82,220.29) -- (288.04,327.58) ;
+%Straight Lines [id:da6935916557368147] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.39 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (199.38,220.07) -- (310.77,327.36) ;
+%Straight Lines [id:da06759068649503264] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (221.27,221.17) -- (332.65,327.14) ;
+%Straight Lines [id:da22722871364635355] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (243.15,220.73) -- (354.54,326.7) ;
+%Straight Lines [id:da979287841278567] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.38 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (266.44,220.29) -- (377.26,327.14) ;
+%Straight Lines [id:da22569465328397387] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (288.04,219.85) -- (399.99,326.7) ;
+%Straight Lines [id:da8027158903898826] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (198.82,220.29) -- (332.65,327.14) ;
+%Straight Lines [id:da4298961957177865] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (221.27,221.17) -- (355.1,328.02) ;
+%Straight Lines [id:da7259819631776816] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.38 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (244.28,220.73) -- (378.11,327.58) ;
+%Straight Lines [id:da24380182183444843] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (266.44,220.29) -- (400.27,327.14) ;
+%Straight Lines [id:da2231017046966406] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (198.82,220.29) -- (355.1,328.02) ;
+%Straight Lines [id:da7620533427126799] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.38 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (221.27,219.85) -- (377.55,327.58) ;
+%Straight Lines [id:da0493653969234924] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (243.71,219.41) -- (399.99,327.14) ;
+%Straight Lines [id:da6741022333286073] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.38 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (198.82,220.29) -- (376.06,326.53) ;
+%Straight Lines [id:da7719492193662476] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (221.59,220.6) -- (398.83,326.83) ;
+%Straight Lines [id:da47651625468879355] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (198.82,220.29) -- (399.99,327.14) ;
+%Straight Lines [id:da30312489810472076] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (399.99,218.53) -- (355.1,328.02) ;
+%Straight Lines [id:da10994650807698525] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (377.55,217.65) -- (332.65,327.14) ;
+%Straight Lines [id:da6581493587012985] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.39 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (355.38,218.97) -- (310.49,328.46) ;
+%Straight Lines [id:da8531038082370903] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (332.65,219.41) -- (287.76,328.9) ;
+%Straight Lines [id:da11385350638877001] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.34 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (311.05,218.53) -- (266.16,328.02) ;
+%Straight Lines [id:da398714975138879] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (288.61,217.65) -- (243.71,327.14) ;
+%Straight Lines [id:da26739671792084874] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (266.44,220.29) -- (220.99,326.26) ;
+%Straight Lines [id:da42404023507655] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (244.61,218.35) -- (199.72,327.85) ;
+%Straight Lines [id:da8828884116321025] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (288.61,218.53) -- (220.99,326.26) ;
+%Straight Lines [id:da39259396960609383] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (311.33,219.41) -- (243.71,327.14) ;
+%Straight Lines [id:da5471507360191554] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.34 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (333.78,220.29) -- (266.16,328.02) ;
+%Straight Lines [id:da22668407232521326] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (355.66,219.85) -- (288.04,327.58) ;
+%Straight Lines [id:da6161663735559477] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.39 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (377.55,217.65) -- (310.49,328.46) ;
+%Straight Lines [id:da6009923510138324] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.81 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (399.99,218.53) -- (332.93,327.58) ;
+%Straight Lines [id:da6906561500680035] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (266.44,220.29) -- (198.54,327.14) ;
+%Straight Lines [id:da3966125606603381] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.39 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (399.99,218.53) -- (310.49,328.46) ;
+%Straight Lines [id:da4205647403959616] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (377.83,216.33) -- (288.32,326.26) ;
+%Straight Lines [id:da021488314323526714] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.34 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (355.66,218.09) -- (266.16,328.02) ;
+%Straight Lines [id:da801391319862313] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (332.65,219.41) -- (243.71,327.14) ;
+%Straight Lines [id:da2321169319545704] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (310.49,218.97) -- (220.99,326.26) ;
+%Straight Lines [id:da6598597013636662] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (288.61,218.53) -- (199.1,325.82) ;
+%Straight Lines [id:da12971361852433327] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (310.49,218.97) -- (198.54,327.14) ;
+%Straight Lines [id:da49253940200869417] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (332.65,219.41) -- (221.27,326.04) ;
+%Straight Lines [id:da1972642454131932] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (355.38,218.97) -- (243.43,327.14) ;
+%Straight Lines [id:da4800861135848704] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.34 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (377.4,218.31) -- (265.88,327.8) ;
+%Straight Lines [id:da07130484042892471] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (332.65,219.41) -- (198.54,327.14) ;
+%Straight Lines [id:da7770285225934104] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (355.66,218.09) -- (221.55,325.82) ;
+%Straight Lines [id:da09068033267412567] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (377.97,219.19) -- (243.85,326.92) ;
+%Straight Lines [id:da056409582345107845] 
+\draw [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=0.34 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ][line width=0.75]    (399.71,219.41) -- (296.11,302.63) -- (271.85,322.13) -- (265.6,327.14) ;
+%Straight Lines [id:da20237209393358158] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (355.38,218.97) -- (198.82,328.02) ;
+%Straight Lines [id:da7070110483341534] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (377.55,217.65) -- (221.55,325.82) ;
+%Straight Lines [id:da05344409245075976] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (399.99,218.53) -- (243.85,326.92) ;
+%Straight Lines [id:da6482589378215278] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (377.4,218.31) -- (198.82,328.02) ;
+%Straight Lines [id:da30580352529745536] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (399.99,218.53) -- (221.55,325.82) ;
+%Straight Lines [id:da9909395082271151] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (400.51,217.93) -- (199.34,327.42) ;
+%Flowchart: Connector [id:dp15159733088575678] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (190.6,336.97) .. controls (190.6,332.03) and (194.15,328.02) .. (198.53,328.02) .. controls (202.91,328.02) and (206.46,332.03) .. (206.46,336.97) .. controls (206.46,341.9) and (202.91,345.91) .. (198.53,345.91) .. controls (194.15,345.91) and (190.6,341.9) .. (190.6,336.97) -- cycle ;
+%Flowchart: Connector [id:dp7006601580637295] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (211.88,337.6) .. controls (211.88,332.66) and (215.43,328.66) .. (219.81,328.66) .. controls (224.19,328.66) and (227.74,332.66) .. (227.74,337.6) .. controls (227.74,342.54) and (224.19,346.55) .. (219.81,346.55) .. controls (215.43,346.55) and (211.88,342.54) .. (211.88,337.6) -- cycle ;
+%Flowchart: Connector [id:dp058013988329834065] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (235.21,336.09) .. controls (235.21,331.15) and (238.76,327.14) .. (243.14,327.14) .. controls (247.52,327.14) and (251.07,331.15) .. (251.07,336.09) .. controls (251.07,341.02) and (247.52,345.03) .. (243.14,345.03) .. controls (238.76,345.03) and (235.21,341.02) .. (235.21,336.09) -- cycle ;
+%Flowchart: Connector [id:dp9687185634281383] 
+\draw  [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ] (257.94,336.97) .. controls (257.94,332.03) and (261.49,328.02) .. (265.87,328.02) .. controls (270.24,328.02) and (273.79,332.03) .. (273.79,336.97) .. controls (273.79,341.9) and (270.24,345.91) .. (265.87,345.91) .. controls (261.49,345.91) and (257.94,341.9) .. (257.94,336.97) -- cycle ;
+%Flowchart: Connector [id:dp18903360202066177] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (279.83,337.85) .. controls (279.83,332.91) and (283.38,328.9) .. (287.76,328.9) .. controls (292.14,328.9) and (295.69,332.91) .. (295.69,337.85) .. controls (295.69,342.78) and (292.14,346.79) .. (287.76,346.79) .. controls (283.38,346.79) and (279.83,342.78) .. (279.83,337.85) -- cycle ;
+%Flowchart: Connector [id:dp9680084215187081] 
+\draw  [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ] (302.28,336.53) .. controls (302.28,331.59) and (305.83,327.58) .. (310.21,327.58) .. controls (314.59,327.58) and (318.14,331.59) .. (318.14,336.53) .. controls (318.14,341.46) and (314.59,345.47) .. (310.21,345.47) .. controls (305.83,345.47) and (302.28,341.46) .. (302.28,336.53) -- cycle ;
+%Flowchart: Connector [id:dp9511999134744147] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (324.71,336.53) .. controls (324.71,331.59) and (328.26,327.58) .. (332.64,327.58) .. controls (337.02,327.58) and (340.57,331.59) .. (340.57,336.53) .. controls (340.57,341.46) and (337.02,345.47) .. (332.64,345.47) .. controls (328.26,345.47) and (324.71,341.46) .. (324.71,336.53) -- cycle ;
+%Flowchart: Connector [id:dp41134898970012146] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (346.88,336.97) .. controls (346.88,332.03) and (350.43,328.02) .. (354.8,328.02) .. controls (359.18,328.02) and (362.73,332.03) .. (362.73,336.97) .. controls (362.73,341.9) and (359.18,345.91) .. (354.8,345.91) .. controls (350.43,345.91) and (346.88,341.9) .. (346.88,336.97) -- cycle ;
+%Flowchart: Connector [id:dp46423422363247413] 
+\draw  [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ] (369.62,336.53) .. controls (369.62,331.59) and (373.17,327.58) .. (377.55,327.58) .. controls (381.92,327.58) and (385.47,331.59) .. (385.47,336.53) .. controls (385.47,341.46) and (381.92,345.47) .. (377.55,345.47) .. controls (373.17,345.47) and (369.62,341.46) .. (369.62,336.53) -- cycle ;
+%Flowchart: Connector [id:dp3381076199440276] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (392.34,336.09) .. controls (392.34,331.15) and (395.89,327.14) .. (400.27,327.14) .. controls (404.65,327.14) and (408.2,331.15) .. (408.2,336.09) .. controls (408.2,341.02) and (404.65,345.03) .. (400.27,345.03) .. controls (395.89,345.03) and (392.34,341.02) .. (392.34,336.09) -- cycle ;
+%Flowchart: Connector [id:dp6808063453635669] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (192.07,210.29) .. controls (192.07,205.35) and (195.62,201.35) .. (200,201.35) .. controls (204.38,201.35) and (207.93,205.35) .. (207.93,210.29) .. controls (207.93,215.23) and (204.38,219.23) .. (200,219.23) .. controls (195.62,219.23) and (192.07,215.23) .. (192.07,210.29) -- cycle ;
+%Flowchart: Connector [id:dp9998537335513744] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (214.24,208.53) .. controls (214.24,203.59) and (217.79,199.59) .. (222.17,199.59) .. controls (226.55,199.59) and (230.1,203.59) .. (230.1,208.53) .. controls (230.1,213.47) and (226.55,217.47) .. (222.17,217.47) .. controls (217.79,217.47) and (214.24,213.47) .. (214.24,208.53) -- cycle ;
+%Flowchart: Connector [id:dp6135508775164056] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (236.68,209.41) .. controls (236.68,204.47) and (240.23,200.47) .. (244.61,200.47) .. controls (248.99,200.47) and (252.54,204.47) .. (252.54,209.41) .. controls (252.54,214.35) and (248.99,218.35) .. (244.61,218.35) .. controls (240.23,218.35) and (236.68,214.35) .. (236.68,209.41) -- cycle ;
+%Flowchart: Connector [id:dp10650175513775784] 
+\draw  [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ] (259.41,210.29) .. controls (259.41,205.35) and (262.96,201.35) .. (267.34,201.35) .. controls (271.72,201.35) and (275.27,205.35) .. (275.27,210.29) .. controls (275.27,215.23) and (271.72,219.23) .. (267.34,219.23) .. controls (262.96,219.23) and (259.41,215.23) .. (259.41,210.29) -- cycle ;
+%Flowchart: Connector [id:dp10660584135780105] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (280.38,208.71) .. controls (280.38,203.77) and (283.93,199.77) .. (288.31,199.77) .. controls (292.69,199.77) and (296.24,203.77) .. (296.24,208.71) .. controls (296.24,213.65) and (292.69,217.65) .. (288.31,217.65) .. controls (283.93,217.65) and (280.38,213.65) .. (280.38,208.71) -- cycle ;
+%Flowchart: Connector [id:dp46759849402177966] 
+\draw  [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ] (303.74,210.73) .. controls (303.74,205.79) and (307.29,201.79) .. (311.67,201.79) .. controls (316.05,201.79) and (319.6,205.79) .. (319.6,210.73) .. controls (319.6,215.67) and (316.05,219.67) .. (311.67,219.67) .. controls (307.29,219.67) and (303.74,215.67) .. (303.74,210.73) -- cycle ;
+%Flowchart: Connector [id:dp8881058169733695] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (326.19,209.85) .. controls (326.19,204.91) and (329.74,200.91) .. (334.11,200.91) .. controls (338.49,200.91) and (342.04,204.91) .. (342.04,209.85) .. controls (342.04,214.79) and (338.49,218.79) .. (334.11,218.79) .. controls (329.74,218.79) and (326.19,214.79) .. (326.19,209.85) -- cycle ;
+%Flowchart: Connector [id:dp009425471783405914] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (348.35,210.29) .. controls (348.35,205.35) and (351.9,201.35) .. (356.28,201.35) .. controls (360.66,201.35) and (364.21,205.35) .. (364.21,210.29) .. controls (364.21,215.23) and (360.66,219.23) .. (356.28,219.23) .. controls (351.9,219.23) and (348.35,215.23) .. (348.35,210.29) -- cycle ;
+%Flowchart: Connector [id:dp5740386786766314] 
+\draw  [color={rgb, 255:red, 155; green, 155; blue, 155 }  ,draw opacity=1 ][fill={rgb, 255:red, 155; green, 155; blue, 155 }  ,fill opacity=1 ] (371.36,209.85) .. controls (371.36,204.91) and (374.91,200.91) .. (379.29,200.91) .. controls (383.66,200.91) and (387.21,204.91) .. (387.21,209.85) .. controls (387.21,214.79) and (383.66,218.79) .. (379.29,218.79) .. controls (374.91,218.79) and (371.36,214.79) .. (371.36,209.85) -- cycle ;
+%Flowchart: Connector [id:dp30959107021550936] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ] (391.78,210.47) .. controls (391.78,205.53) and (395.33,201.52) .. (399.71,201.52) .. controls (404.09,201.52) and (407.64,205.53) .. (407.64,210.47) .. controls (407.64,215.41) and (404.09,219.41) .. (399.71,219.41) .. controls (395.33,219.41) and (391.78,215.41) .. (391.78,210.47) -- cycle ;
+%Straight Lines [id:da05756463950883961] 
+\draw  [dash pattern={on 3.75pt off 3pt on 7.5pt off 1.5pt}]  (131.5,369.44) -- (196.64,346.57) ;
+\draw [shift={(198.53,345.91)}, rotate = 160.66] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (6.56,-1.97) .. controls (4.17,-0.84) and (1.99,-0.18) .. (0,0) .. controls (1.99,0.18) and (4.17,0.84) .. (6.56,1.97)   ;
+%Straight Lines [id:da3039248046479113] 
+\draw  [dash pattern={on 3.75pt off 3pt on 7.5pt off 1.5pt}]  (156,369.94) -- (217.93,347.23) ;
+\draw [shift={(219.81,346.55)}, rotate = 159.87] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (6.56,-1.97) .. controls (4.17,-0.84) and (1.99,-0.18) .. (0,0) .. controls (1.99,0.18) and (4.17,0.84) .. (6.56,1.97)   ;
+%Straight Lines [id:da7357894178387181] 
+\draw  [dash pattern={on 3.75pt off 3pt on 7.5pt off 1.5pt}]  (188,371.44) -- (241.34,345.89) ;
+\draw [shift={(243.14,345.03)}, rotate = 154.41] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (6.56,-1.97) .. controls (4.17,-0.84) and (1.99,-0.18) .. (0,0) .. controls (1.99,0.18) and (4.17,0.84) .. (6.56,1.97)   ;
+%Straight Lines [id:da07544659206674531] 
+\draw  [dash pattern={on 3.75pt off 3pt on 7.5pt off 1.5pt}]  (233,370.44) -- (264.26,347.1) ;
+\draw [shift={(265.87,345.91)}, rotate = 143.26] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (6.56,-1.97) .. controls (4.17,-0.84) and (1.99,-0.18) .. (0,0) .. controls (1.99,0.18) and (4.17,0.84) .. (6.56,1.97)   ;
+%Straight Lines [id:da3188945048887053] 
+\draw  [dash pattern={on 3.75pt off 3pt on 7.5pt off 1.5pt}]  (265.5,370.44) -- (286.39,348.24) ;
+\draw [shift={(287.76,346.79)}, rotate = 133.27] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (6.56,-1.97) .. controls (4.17,-0.84) and (1.99,-0.18) .. (0,0) .. controls (1.99,0.18) and (4.17,0.84) .. (6.56,1.97)   ;
+%Straight Lines [id:da08361117149762243] 
+\draw  [dash pattern={on 3.75pt off 3pt on 7.5pt off 1.5pt}]  (295,370.44) -- (309.17,347.18) ;
+\draw [shift={(310.21,345.47)}, rotate = 121.35] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (6.56,-1.97) .. controls (4.17,-0.84) and (1.99,-0.18) .. (0,0) .. controls (1.99,0.18) and (4.17,0.84) .. (6.56,1.97)   ;
+%Straight Lines [id:da022987872897272776] 
+\draw  [dash pattern={on 3.75pt off 3pt on 7.5pt off 1.5pt}]  (326.5,370.44) -- (332.16,347.41) ;
+\draw [shift={(332.64,345.47)}, rotate = 103.82] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (6.56,-1.97) .. controls (4.17,-0.84) and (1.99,-0.18) .. (0,0) .. controls (1.99,0.18) and (4.17,0.84) .. (6.56,1.97)   ;
+%Straight Lines [id:da35308817536672854] 
+\draw  [dash pattern={on 3.75pt off 3pt on 7.5pt off 1.5pt}]  (348.5,368.94) -- (354.28,347.84) ;
+\draw [shift={(354.8,345.91)}, rotate = 105.31] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (6.56,-1.97) .. controls (4.17,-0.84) and (1.99,-0.18) .. (0,0) .. controls (1.99,0.18) and (4.17,0.84) .. (6.56,1.97)   ;
+%Straight Lines [id:da9008915094337389] 
+\draw  [dash pattern={on 3.75pt off 3pt on 7.5pt off 1.5pt}]  (385,368.39) -- (378.16,347.37) ;
+\draw [shift={(377.55,345.47)}, rotate = 71.98] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (6.56,-1.97) .. controls (4.17,-0.84) and (1.99,-0.18) .. (0,0) .. controls (1.99,0.18) and (4.17,0.84) .. (6.56,1.97)   ;
+%Straight Lines [id:da5145832595750033] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (166.05,251.72) -- (198.82,220.29) ;
+%Straight Lines [id:da5838551448775622] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (166.05,294.38) -- (196.6,325.59) ;
+%Straight Lines [id:da41993945711340164] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=0.8 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]    (400.27,219.41) -- (400.27,275.91) -- (400.27,281.19) -- (400.27,327.14) ;
+%Straight Lines [id:da8995804901864395] 
+\draw  [dash pattern={on 3.75pt off 3pt on 7.5pt off 1.5pt}]  (413.8,367.59) -- (402.92,345.25) ;
+\draw [shift={(402.05,343.45)}, rotate = 64.04] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (6.56,-1.97) .. controls (4.17,-0.84) and (1.99,-0.18) .. (0,0) .. controls (1.99,0.18) and (4.17,0.84) .. (6.56,1.97)   ;
+%Shape: Rectangle [id:dp7704156976878842] 
+\draw  [fill={rgb, 255:red, 176; green, 211; blue, 255 }  ,fill opacity=1 ] (124.2,251.72) -- (166.05,251.72) -- (166.05,294.38) -- (124.2,294.38) -- cycle ;
+
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 209; blue, 93 }  ,fill opacity=1 ]  (110.71,371.04) -- (144.89,371.04) -- (144.89,390.4) -- (110.71,390.4) -- cycle  ;
+\draw (113.74,375.39) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize,rotate=-359.31] [align=left] {[CLS]};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 209; blue, 93 }  ,fill opacity=1 ]  (146.18,371.19) -- (163.35,371.19) -- (163.35,390.35) -- (146.18,390.35) -- cycle  ;
+\draw (149.33,375.2) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize,rotate=-0.69] [align=left] {if};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 209; blue, 93 }  ,fill opacity=1 ]  (337.02,370.39) -- (360.14,370.39) -- (360.14,389.54) -- (337.02,389.54) -- cycle  ;
+\draw (340.03,374.53) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize,rotate=-359.54] [align=left] {= =};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 209; blue, 93 }  ,fill opacity=1 ]  (256.56,371.7) -- (273.62,371.7) -- (273.62,390.75) -- (256.56,390.75) -- cycle  ;
+\draw (259.61,375.71) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize,rotate=-0.22] [align=left] {,};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 209; blue, 93 }  ,fill opacity=1 ]  (163.95,371.16) -- (211.04,371.16) -- (211.04,390.44) -- (163.95,390.44) -- cycle  ;
+\draw (167.03,375.17) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize,rotate=-0.37] [align=left] {request(};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 209; blue, 93 }  ,fill opacity=1 ]  (212.91,371.19) -- (254.01,371.19) -- (254.01,390.43) -- (212.91,390.43) -- cycle  ;
+\draw (215.99,375.2) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize,rotate=-0.37] [align=left] {VAR\_2};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 209; blue, 93 }  ,fill opacity=1 ]  (318.33,371.12) -- (335.71,371.12) -- (335.71,390.45) -- (318.33,390.45) -- cycle  ;
+\draw (321.66,375.15) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize,rotate=-1.47] [align=left] { )};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 209; blue, 93 }  ,fill opacity=1 ]  (275.63,371.68) -- (316.66,371.68) -- (316.66,390.76) -- (275.63,390.76) -- cycle  ;
+\draw (278.63,375.76) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize,rotate=-359.88] [align=left] {VAR\_3};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 209; blue, 93 }  ,fill opacity=1 ]  (361.27,370.82) -- (402.3,370.82) -- (402.3,389.89) -- (361.27,389.89) -- cycle  ;
+\draw (364.28,374.89) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize,rotate=-359.89] [align=left] {VAR\_4};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 209; blue, 93 }  ,fill opacity=1 ]  (404.34,370.21) -- (439.61,370.21) -- (439.61,389.75) -- (404.34,389.75) -- cycle  ;
+\draw (407.57,374.22) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize,rotate=-1.02] [align=left] {[SEP]};
+% Text Node
+\draw (138.45,268.15) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize]  {$M$};
+
+
+\end{tikzpicture}

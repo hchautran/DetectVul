@@ -1,0 +1,925 @@
+\documentclass{ieeeaccess}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{tikz}
+\usepackage{import}
+\usepackage{svg}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{fourier} 
+\usepackage{array}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{colortbl}
+
+% \usepackage{subcaption}
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
+
+\newlength{\Oldarrayrulewidth}
+\newcommand{\Cline}[2]{%
+  \noalign{\global\setlength{\Oldarrayrulewidth}{\arrayrulewidth}}%
+  \noalign{\global\setlength{\arrayrulewidth}{#1}}\cline{#2}%
+  \noalign{\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}}}
+\DeclareMathOperator*{\argmin}{argmin} 
+\DeclareMathOperator*{\argmax}{argmax} 
+\DeclareMathOperator*{\concat}{||} 
+
+\NewSpotColorSpace{PANTONE}
+\AddSpotColor{PANTONE} {PANTONE3015C} {PANTONE\SpotSpace 3015\SpotSpace C} {1 0.3 0 0.2}
+\SetPageColorSpace{PANTONE}%
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+\history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
+\doi{10.1109/ACCESS.2017.DOI}
+
+\title{DetectBERT: Toward a versatile architecture for source code vulnerability detection}
+\author{\uppercase{Hoai-Chau Tran}\authorrefmark{1, 3},
+\uppercase{Anh-Duy Tran\authorrefmark{4}, and Kim-Hung Le}.\authorrefmark{2,3}}
+\address[1]{University of Science, Ho Chi Minh City, Vietnam (e-mail: author@boulder.nist.gov)}
+\address[2]{University of Information Technology, Ho Chi Minh City, Vietnam (e-mail: author@lamar.colostate.edu)}
+\address[3]{Vietnam National University, Ho Chi Minh City, Vietnam}
+\address[4]{imec-DistriNet, KU Leuven, Leuven, Belgium}
+\markboth
+{Author \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
+{Author \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
+
+\corresp{Corresponding author: First A. Author (e-mail: author@ boulder.nist.gov).}
+
+\begin{abstract} 
+Detecting vulnerabilities in source code using learning-based approaches has gained significant attention in recent years. While GNN-based deep learning methods have shown promising results in detecting vulnerabilities, GNNs have limitations due to inductive biases toward predefined graph structures and local connectivity,  a common solution for this issue is to combine different graph structures to provide the GNN models with more context about the relationship between statements. However, the process of constructing graphs is challenging and hard to reproduce for multiple programming languages.  To overcome the limitations of GNN-based approaches, we propose a highly versatile approach called DetectBERT,  which uses self-attention mechanisms to detect vulnerable code at the statement level in Python without requiring any pre-defined graph structures. In essence, DetectBERT consists of two BERT-based models which serve as a feature  extractor and classifier that can learn contextual interactions between statements in  code snippets/functions. To evaluate the effectiveness of our approach,  a new dataset was created from two different public datasets, both of which contain multiple commits from real-world open-source projects. Given a Python file, the data processing pipeline involves extracting and normalizing all statements and  grouping them into function gadgets, resulting in a dataset that contains over 21,000 processed samples.  The empirical results demonstrate that DetectBERT can outperform other GNN-based methods that use Control Flow Graph as the underlying graph structure. Specifically, for statement-level vulnerability detection, the best DetectBERT model achieved an F1 score of 70.34\%, precision of 68.80\%, and recall of 75.83\%, which outperforms GNN-based models with the best hyperparameter settings ( GCN had the best  F1 score of 47.18\%, precision of 40.26\%, and recall of 64.71\% and GAT  had the best F1 score of 50.50\%, precision of 43.98\%, and recall of 67.12\%). 
+\end{abstract}
+
+\begin{keywords}
+Enter keywords or phrases in alphabetical 
+order, separated by commas. For a list of suggested keywords, send a blank 
+e-mail to keywords@ieee.org or visit \underline
+{http://www.ieee.org/organizations/pubs/ani\_prod/keywrd98.txt}
+\end{keywords}
+
+\titlepgskip=-15pt
+
+\maketitle
+
+\section{Introduction}\label{sec:I}
+\par % Paragraph nói về ngữ cảnh của các nguy cơ trong code (vulnerability) có khả năng dẫn tới các nguy cơ về an toàn thông tin
+Detecting vulnerabilities in source code is a critical task in modern software development. It helps ensure the safety and security of software users since attackers can exploit vulnerabilities embedded in source code \cite{cwe22,cwe352,cwe601,cwe79,cwe94,CWE-77,CWE-89} to compromise the integrity of an application or system. To identify potential security vulnerabilities in the early stages of the development process, source code vulnerability detection (SVD) is often performed as part of Static Application Security Testing (SAST). However, traditional SVD approaches using  rule-based \cite{rule_tool1, rule_tool2, rule_tool3, rule_tool4, rule_tool5, rule_tool6, coverity} methods can be error-prone due to the complexity and variability of real-world source code in different projects \cite{sast_tools_study}. In recent years, deep learning (DL)-based approaches \cite{Linevd, MVD, vuldeekeeper, SySeVR, VulDeeLocator, DeepWukong, VUDENC, func_level_1, func_level_2, func_level_4, devign, Are, vuldeepeeker2} have shown promising results in adapting to real-world code changes and providing wider coverage in detecting vulnerable code.
+
+ 
+
+\par % VIết vể các challenge hiện tại
+While DL-based approaches for detecting vulnerable code have shown great promise, there are still challenges to overcome before they can be effectively applied to real-world software development. One major obstacle is the issue of robustness and generalization. Since deep learning models require a significant amount of data to train, the quantity and quality of datasets used can greatly affect their performance. If the dataset quality is low, it can lead to inaccurate predictions of vulnerable patterns and an increased rate of false negatives for unseen data. One factor that can harm the quality of the dataset is the presence of duplicated samples  in both training and testing data, which can cause data leakage and artificially inflate reported results \cite{vuldeekeeper, VUDENC, SySeVR, Are}. Furthermore, some datasets \cite{devign, sard, SATE} do not accurately reflect the real-world distribution of vulnerable code, where non-vulnerable code makes up a larger portion of a software codebase. Additionally, the models can be confused by the presence of user-defined variables, functions, classes, and strings in the source code. These factors, combined with the presence of duplicated data, can cause the model to simply "memorize" trained data instead of actually learning vulnerable patterns.
+
+\par Another limitation of recent DL-based approaches is that they often overlook the fact that a vulnerable pattern can exist in just a few lines of code. Instead, they focus on a higher level of granularity, such as function-level \cite{Are, devign, func_level_1,func_level_2,func_level_4}, slice-level \cite{VUDENC, vuldeepeeker2, SySeVR, VulDeeLocator,vuldeekeeper}, or even file-level \cite{File_level_1, File_level_2, File_level_3, file_level_4}. This can make it difficult and time-consuming for developers to identify the specific source of the problem and can result in missed vulnerabilities, longer review times, and increased effort to detect and remediate the issue.
+While the manual labeling process requires a deep understanding of the code structure and the programming language itself, the most promising solution used in previous studies \cite{Linevd, MVD}, is to use commit history from open-source repositories to identify fixes for vulnerabilities and label the deleted lines as vulnerable. However, this approach also has limitations. Many commits are not directly related to the vulnerability or only resolve a portion of the problem. Also, some changes in the code are irrelevant to the vulnerability (adding/removing tabs, trailing spaces, line breaks, and comments).
+
+
+\par % Viết về tổng quan solution để giải quyết
+    Given the above problems, there were efforts to resolve them. To deal with the unrealistic data distribution, previous works have used real-world code from open-source projects to create their own dataset\cite{devign, Are, Linevd, VUDENC, cvefixes} instead of synthesis or semi-synthesis datasets\cite{sard, SATE, Draper}, further preprocess steps are also conducted to normalize user-defined names into symbolic representations\cite{vuldeekeeper, vuldeepeeker2, DeepWukong,SySeVR,VulDeeLocator}. By selecting data from open-source projects and normalizing source code, the issue of data duplication is partially addressed. However, it is still unavoidable as some portions of the code from different repositories may resemble each other due to code reuse and sharing practices. 
+\par To improve the prediction results at a more detailed, statement-level granularity, previous studies\cite{MVD, Linevd, IVDetect} have employed graph data structures, where each statement is represented as a node, then feature vectors are extracted from each node using either static\cite{glove, doc2vec, word2vec} or dynamic embedding\cite{codebert} methods. After the feature extraction process, node/graph classification is performed by combining different types of graphs (Control Flow Graph, Data Dependency Graph, Program Dependency Graph, Call Graph, etc.) with supplementary information  and using a GNN (Graph Neuron Network) architecture such as Graph  Attention Network (GAT)\cite{GAT},  Graph Convolution Network (GCN)\cite{GCN} to learn the relationships and interaction between nodes. These approaches using GNNs have achieved state-of-the-art performance for the SVD task in recent years.
+
+\par Although GNNs have demonstrated promising empirical results compared to other methods, they still have some limitations. These models are often constrained by inductive biases, such as local connectivity and predefined graph structures, which restrict their ability to identify more complex patterns and learn from distant statements because of missed connections. To overcome this limitation, there are two common strategies: increasing the number of layers in the GNN model or combining different graph structures to capture more features from distant code statements. The latter strategy is often preferred in previous studies \cite{Linevd, DeepWukong, MVD, IVDetect, Are} since increasing the number of layers in GNNs can harm the model's performance due to the over-smoothing \cite{over_smooth} and over-squashing\cite{over_squash} problems in GNN  architectures. 
+
+However, constructing graphs for multiple programming languages is a challenging and non-scalable process due to various reasons. One of the major challenges is that programming languages keep evolving, with new constructs and features being added in newer versions. Consequently, developing graphs that are compatible with multiple versions of a language can be difficult. For instance, the Abstract Syntax Tree (AST) module of Python 2 is incapable of parsing AST for Python 3 code, and vice versa. In addition, different programming languages have distinct syntaxes and semantics, which require more effort to reconstruct informative graphs for each programming language. Moreover, the process of constructing different graph structures heavily relies on available tools in each programming language, thus, most recent previous works \cite{Are,devign,DeepWukong,Linevd,MVD,IVDetect} have exclusively focused on building SVD solutions for C/C++  due to  the extensive ecosystem of tools and libraries available\cite{c_tool1,c_tool2,ctool3,ctool4}. To address the challenges of GNNs, a new approach is necessary to capture the relationship between statements without relying on any pre-defined graph structures.
+
+
+\par % Dẫn vào bài báo và đóng góp của em
+In this paper, we present DetectBERT, a deep learning-based approach that can provide statement-level predictions without extracting graphs and can be used over multiple programming languages. In general, the architecture of DetectBERT consists of  two transformer encoder (BERT-based) models which are utilized to extract feature vectors (feature extractor) and learn the complex relationships between statements in code snippets or functions (classifier). The motivation behind this idea is that  the transformer's encoder architecture is actually a special case of graph neural network (GNN), where nodes are globally interconnected \cite{transformer2graph}, and self-attention layers in the encoder model enable learning of the interactions between nodes. This is similar to the message-passing mechanism of GNNs, where weighted connections are established between every pair of nodes in the graph. Using this approach, we can avoid relying on any specific set of tools in any programming language and leverage large amounts of data from real-world open-source projects to form more connections between nodes without a predefined graph structure. Moreover, there are many BERT-based models \cite{sBERT,codebert, minilm,mpnet, zhou2023codeBERTscore} that are pre-trained on large amounts of code corpus in different programming languages, making it easier to scale our architecture to perform SVD tasks for multiple programming languages. The motivation and inner workings of our model will be discussed in sections \ref{sec:motivation} and \ref{sec:ME}, respectively.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=85mm]{sample.png}
+    \caption{Our model has identified a code sample that is susceptible to CWE-601 (URL Redirection to Untrusted Site ) vulnerability, with a stronger indication of vulnerability represented by a darker red line. The Python statement that lies between lines 114 to 118  assigns the value of the `redirect\_field\_name` parameter received in the request to the `oidc\_login\_next` session variable. This variable is then used later to redirect the user after the authentication process is complete. If the value of `redirect\_field\_name` is controlled by an attacker, they can potentially set it to a malicious URL and trick the user into visiting it. This is known as an open redirect vulnerability. To prevent this vulnerability, validating the `redirect\_field\_name` parameter is important before using it to set the `oidc\_login\_next` variable. One way to do this is to only allow redirection to specific, trusted URLs. Another approach is to use a whitelist of allowed values for the `redirect\_field\_name` parameter.}
+    \label{fig:sample}  
+\end{figure}
+\par While most previous works build their model for only C/C++, Python is chosen as the main programming language for the SVD task, the reason behind this decision is Python's syntax is closer to natural language for which transformers models perform very well\cite{Embeds_comparison}. On the other hand, Python does not receive a lot of attention in recent works despite its popular usage in many fields (artificial intelligence, web development, automation and system administration, IoT development, game development, etc.) due to its ease of use, versatility, and availability of many libraries and modules. The data used in this work is got from two public datasets which are CVEFixes\cite{cvefixes} and VUDENC\cite{VUDENC}, both of which originated from GitHub commits that are used to patch issues related to vulnerabilities in different open-source projects, we also introduce our own labeling criteria to reduce false positive ground truth. To make the model more robust to adversarial attacks, all user-defined names such as variables and functions are normalized into generic names, then all statements are extracted and labeled based on changes in collected commits. More information about the data processing and labeling process will be provided in section ~\ref{sec:FE}.
+
+\par In summary, this paper makes the following contributions:
+\begin{itemize}
+\item  We propose DetectBERT,  an architecture that can carry out statement-level SVD for Python source code  by stacking two BERT-based models as a feature extractor and a classifier. By using the self-attention mechanism  in transformer enocders\cite{attention}, the model  can learn connections and relationships among statements in a function  without using any predefined graph structure.
+\item  Experiments with the aim to evaluate the effectiveness of DetectBERT are conducted by comparing it with other GNN-based architectures. To the best of our knowledge, there is no previous work that has constructed a graph dataset for Python. Hence, we have created our own version using Control Flow Graphs (CFGs) as the underlying data structure. The empirical result shows that DetectBERT can outperform the GNN-based approaches in every metric.
+\item  Since the datasets \cite{VUDENC, cvefixes, devign} used  in this  paper  are not originally  built for statement-level classification,  a new data preprocessing pipeline was built  to extract, normalize and label Python statements. Due to the lack of domain knowledge,  the commits history from  open-source projects is also utilized for the labeling process, however, to reduce the number of false positive ground-truth labels,  we also introduce our own criteria to filter commit changes  that are irrelevant to the vulnerable pattern and reduce the duplication rate in the dataset. 
+\item  Although our solution was first intended to build for Python, an additional experiment on C/C++ code was also conducted to demonstrate the versatility of our architecture. The experiment is conducted on the Devign dataset \cite{devign} which is originally created for function-level. In order to perform statement-level for each sample,  C/C++ statements are also extracted and labeled based on the added and deleted lines in each sample's commits. The experiments showed competitive results compared to other GNN-based approaches proposed in \cite{Linevd} with the same objective. 
+\item To further advance the field and enable future research, we have made our implementations including the whole pipeline (data preprocessing, training, and inference), datasets, and models publicly available on \href{https://github.com/Edwin372/DetectBERT}{GitHub} and \href{https://huggingface.co/EddieChen372/DetectBERT}{Huggingface Hub}. This will allow other researchers and practitioners to reproduce our experiments and build upon our work. 
+\end{itemize}
+\section{Background and motivation}
+This section will give a brief background about Graph Neural Networks (GNNs) and BERT-based models and discuss how these architectures have been applied to perform SVD in recent years.
+\subsection{BERT-base models}
+BERT \cite{bert} and its variant models \cite{albert,distilbert}  have become increasingly popular in recent years for natural language understanding (NLU)\cite{bert}. At the heart of these models lies the transformer encoder layers, which use a multi-head self-attention mechanism. Further details about self-attention layers and other components such as layer normalization\cite{layer_norm}, residual connection, and full-connected feed-forward neuron network, can be found in the very famous study\cite{attention} by Vaswani et al. Essentially, given a sentence that has been tokenized into $n$ tokens, we can represent the embedding matrix for that sentence as $X\in \mathbb{R}^{n \times d}$ where $d$ is the hidden size of the embedding vectors. The entire process can be formulated as follows:
+\begin{equation}
+\text{MultiHead}(Q,K,V) = \text{Concat}(head_1,...,head_h)W^O
+\end{equation}
+\begin{equation}
+\text{head}_i = \text{Attention}(XW_i^Q,XW_i^K,XW_i^V)
+\end{equation}
+\begin{equation} \label{equa:self_attention}
+\text{Attention}(Q,K,V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+\end{equation}
+
+Here, $Q$, $K$, and $V$ are the matrices obtained from the input sequence, and $W_i^Q$, $W_i^K$, and $W_i^V$ are the trainable weight matrices for the $i^{th}$ attention head. The output of each attention head is concatenated, and the resulting matrix is multiplied by a weight matrix trainable $W^O$ to obtain the final output. The $\text{softmax}$ function is applied to the scaled dot-product of $Q$ and $K$ to calculate the attention scores. The constant $d_k$ is the dimensionality of the key vectors.
+
+\par In the context of detecting vulnerable code, it is common to benefit from transfer learning by utilizing pre-trained BERT models \cite{codebert} as a feature extractor layer\cite{Linevd, Embeds_comparison}, which generates a dynamic contextualized vector for each token in a slice of code. This vector is then aggregated using pooling techniques such as max, mean, or selecting the representation vector of the first token (usually a special token called [CLS]). The resulting vectors are then fed to another classifier model such as a simple multi-layer perceptron (MLP) model, an RNN-based\cite{rnn, LSTM, GRU}, or  a GNN-based\cite{GNN, GAT, GCN} model for training and evaluation.
+\subsection{GNN-base models} \label{sec:graph_models}
+\par Graph Neural Networks (GNNs) have become popular due to their ability to perform various tasks beyond graph-related problems including computer vision\cite{GNN_CV}, natural language processing\cite{GNN_NLP}, and recommendation systems\cite{GNN_Reccomend}. When it comes to identifying vulnerable code, previous studies have commonly utilized GNN-based approaches to achieve state-of-the-art results in detecting vulnerable code at a fine granularity level.
+\par  In general the process of  approaches that utilize GNNs in previous studies share common steps. Firstly, tools such as \cite{c_tool1,c_tool2,ctool3,ctool4} are utilized to extract all statements from a given source code file, code snippet, or function, which are then used to construct a graph structure that represents the code's overall structure. Such graphs may be control flow graphs (CFGs), call graphs (CGs), data dependency graphs (DDGs), program dependency graphs (PDG), etc., or a combination of these, aiming at providing more features for later GNN model learning. Next, each statement is transformed into fixed-size vectors through either static\cite{doc2vec,word2vec, glove, fasttext}, or dynamic\cite{bert} embedding techniques. The encoded vectors are then fed into GNN-based models, where they learn the interaction between each node and output graph embedding vectors. Finally, all the vectors are passed through a classifier such as Multi-Layer Perceptron (MLP), which produces the final output prediction. Depending on the desired level of granularity, the classification task for vulnerable code detection using GNNs can be performed at either the graph-level\cite{devign, Are} (e.g., at the function level), or the node-level\cite{Linevd, IVDetect, MVD} (e.g., at the statement level). 
+\par In essence, the learning process of GNNs relies on the message-passing scheme, also known as neighborhood aggregation\cite{message_passing}. To explain this scheme in a general view, let's denote the feature vector of node $i$ in the $(l-1)$-th layer of the GNN model as $\Vec{v}_i^{l-1}\in \mathbb{R^d}$, and $\mathcal{N}(i)$ represents the set of neighbor nodes of node $i$. We can denote the edge features from node $j\in \mathcal{N}(i)$ to node $i$ as $\Vec{e}_{ij} \in \mathbb{R}^D$. Then, the feature vector of node $i$ in the next $l$-th layer can be computed using the following equation:
+\begin{equation} \label{equa:message_pass}
+\Vec{v}^{l}_i = \gamma^{l} \bigg( \Vec{v}_i^{l-1} , \bigoplus_{j\in \mathcal{N}(i)} \phi^{l-1}(\Vec{v}_i^{l-1}, \Vec{v}_j^{l-1}, \Vec{e}_{ij})\bigg)
+\end{equation}
+
+\par The equation \ref{equa:message_pass} utilizes a differentiable and permutation invariant function denoted as $\bigoplus$, which is typically a sum, mean, or max function. Meanwhile, the functions $\gamma$ and $\phi$ are differentiable and can take the form of MLPs, or more advanced functions such as multi-head attention utilized in GAT\cite{GAT}. 
+
+\par The problem with the recent GNN-base approaches\cite{devign, Linevd, Are, MVD} is that they treat the code environment as a combination of fixed graphs where graph structures such as DDG, CG, or PDG are predefined and remain constant throughout the analysis. However, accurately constructing informative graph representations for each programming language can be really challenging, and redesigning the architecture of the GNN for each vulnerability type is not feasible due to the vastness of the cybersecurity world. Another notable limitation is that GNNs tend to have a bias toward local connectivity, meaning that nodes tend to only interact with their immediate neighbors in the graph. On one hand, this can help GNNs learn localized patterns in the graph and reduce the computational complexity of the learning algorithm. On the other hand, local connectivity is also a constraint that limits that model's ability to identify potentially vulnerable patterns between distanced code statements.
+
+\subsection{Motivation} \label{sec:motivation}
+
+\par   To overcome the limitations of GNN models, we suggest a data-driven technique for dealing with the intricate relationships between statements in code snippets or functions. Rather than using pre-defined graph structures, the structure of graphs are inferred from the patterns learned by training on large datasets. This is achieved using a multi-head self-attention operation, which is a special  case of  the message-passing scheme in GNNs, where every node is linked to all other nodes.
+
+\par To be more specific, in the message-passing system of GNNS, nodes obtain messages from their nearby neighbors and integrate them to generate updated contextual representations. This iterative procedure permits nodes to exchange information, resulting in more precise and meaningful representations of the data. Conversely, the self-attention mechanism creates a soft connection globally to all other nodes and calculates a node's contextual feature by weighting the features of its neighbors, with the  weights being determined by the learnable weights from the self-attention operator. Let's consider the case  self-attention operator for one head, for a given statement $i$ in a code snippet with representational embeddings vector $\Vec{v}^l_i$, where $l$ is the $l$-th transformer encoder layer of the current model and $\mathcal{N}(i)$ is set that contains all nodes in the graph. The self-attention formula \ref{equa:self_attention} can be written in the form of a message-passing formula \ref{equa:message_pass} as follow:
+\begin{equation} \label{equa:self-attend_graph}
+\Vec{v}^{l}_i = \gamma^l\bigg(\sum_{j\in \mathcal{N}(i)\cup i} \text{softmax}_j(W_Q^{l-1} \Vec{v}^{l-1}_i, W_K^{l-1} \Vec{v}^{l-1}_j) W_V^{l-1} \Vec{v}^{l-1}_j \bigg)
+\end{equation}
+\par In the equation \ref{equa:self-attend_graph}, $W_Q^{l-1}$,$W_K^{l-1}$, and $W_Q^{l-1}$ are trainable weight matrices that help produce query, key, and value vectors for the self-attention operation and  $\gamma^{l-1}$  represent other components in the encoder model (MLPs, residual connection, layer normalization). The attention weights from node $i$ to its neighbors $j$ are then rescaled to the range from $0$ to $1$ by the $\text{softmax}_j$  function.
+\par  Utilizing the self-attention mechanism can potentially enhance a model's ability to adapt to the complex nature of real-world coding environments. For example, in a recent study by David et al., \cite{Linevd} which utilized control-flow and data-flow graphs to develop a GNN-based solution for detecting vulnerable statements in C/C++, the empirical results showed that models trained on program dependencies graphs, which combine both data-flow and control-flow information, outperform models trained solely on CFGs. This is understandable since the dataset used for training and evaluating  had many memory-related vulnerabilities, which are challenging to detect using control flow analysis alone. In fact, data flow analysis can be more effective in identifying these types of vulnerabilities by tracing how data is allocated, used, and freed within a program. Therefore, combining data flow and control flow analyses can provide more context for the GNN model to better learn vulnerable patterns. However, for other popular languages such as Python, Java, Javascript, Golang, etc.,  researchers are required to invest more time and effort to develop new approaches and tools for each language, which can help reconstruct these informative graphs to provide the GNN model with the necessary context to perform SVD task.
+
+
+Alternatively,  using self-attention mechanisms can create global connections between nodes based on the data's characteristics learned from available large datasets, thus avoiding any biases introduced by predefined graph structures. This approach allows the data to speak for itself, enabling researchers to discover more meaningful patterns that may have been missed when identifying vulnerable statements using GNN-based approaches. 
+\section{Problem formation}\label{sec:PF}
+\begin{figure}[h]
+    \centering
+    \input{function_gadget.tikz}
+    \caption{An illustration of a  function gadget $\mathbf{d_i} \in \mathbf{D}$ that consists of 8 statements $s_{ij} \in \mathbf{s}_i$ and their corresponding labels $y_{ij} \in \Vec{y}_i$. All statements have had their trailing spaces, tab, and newline escape removed. Here, two of the statements, namely $s_{i2}$, and $s_{i3}$, are susceptible to SQL injection attacks. An attacker can exploit this vulnerability by manipulating the input parameters `self.name` and `self.password` to insert malicious SQL code into the query.
+} \label{fig:func_gadget}
+\end{figure}
+
+In this paper, the classification of vulnerable statements is treated as a multi-class problem. Given a source file, all statements are extracted and grouped into function gadgets, where each gadget represents a set of statements that belong to a single function. Our dataset can be denoted as $\mathbf{D=\{\mathbf{d_1, d_2, .., d_N}}\}$, where N is the number of gadgets. Let $\mathbf{s_i}$ and $\vec{y_i}$ represent the set of statements of function gadget $\mathbf{d_i}$ and their corresponding labels, we have  $\mathbf{d_i}=(\mathbf{s_i}, \Vec{y_i})=((s_{ij},y_{ij})|s_{ij}\in \mathbf{s_i}, y_{ij} \in \Vec{y_i}, y_{ij}\in\{0,1,2,.., c-1\}, j \in\{1,2,..,n\})$, in which $c$ denotes the number of classes and $n$ is the number of statements in the function gadget. In figure \ref{fig:func_gadget}, a function gadget $\mathbf{d_i}$ is depicted, wherein each statement $s_{ij}$ is a piece of text with all trailing spaces, tabs, and newline breaks removed. The statements in $\mathbf{s_i}$ are arranged in the same order as they appear in the original function from which they were extracted. The vector $\Vec{y}_i$ contains the labels $y_{ij}$ that are corresponding to each statement $s_{ij}$.
+
+    
+Let $f$ and $\theta$ be the deep-learning model and the trainable weights that are used to map $\mathbf{s_i} \rightarrow \Vec{y_i}$, we have  $\hat{Y}_i=f(\mathbf{s_i},\mathbf{\theta})$, where $\hat{Y}_i \in \mathbb{R}^{n\times c}$ is a matrix that denotes predicted probability distributions of each label for all statements in $\mathbf{s_i}$. Our final goal is to find the set of weights $\theta^*$ that can help  approximate $\hat{Y}_i$ to $\Vec{y_i}$ by minimizing a loss function $L(\theta)$, the whole learning process can be formulated as:
+\begin{equation} \label{equa:problem_formation}
+\argmin_\theta L(\theta)=\sum _{i=1}^{N}\sum_{j=1}^{n}\frac{l_{ij}(f(s_{ij},\mathbf{\theta}),y_{ij})}{\sum _{i=1}^{n} w_{y_{ij}}}\end{equation}
+ 
+Here in equation \ref{equa:problem_formation}, $l_{ij}$ denotes the weighted cross-entropy (WCE) loss function, and $w_{y_{ij}}$ is the weight assigned to each sample based on its ground truth label.
+
+\section{Methodology} \label{sec:method}
+This section discussed details of the pipeline used for our approach including phases for data preprocessing, training, and inference. 
+\begin{figure*}[h]
+    \centering
+    \input{overview.tikz}
+    \caption{DetectBERT pipeline overview.} 
+    \label{fig:overview}  
+\end{figure*}
+\begin{figure*}[h]
+    \centering
+    \input{train.tikz}
+    \caption{The DetectBERT training pipeline treats each function gadget as a batch of statements. Given a function gadget $\mathbf{s}_i$ The statements are tokenized and then fed into an embedding layer and added to positional embedding, which produces an embedding tensor $\mathbf{X}_i^0 \in \mathbb{R}^{n \times s \times d}$. Here, $n$ represents the number of statements in the input gadget, $s$ is the length of the longest statement, and $d$ is the hidden dimension of each embedding vector. This tensor is then processed through multiple blocks of transformer encoders, each encoder consists of a masked self-attention layer, a feed-forward layer, and layer normalizations.  The output of the encoders in the feature extraction stage is then pooled by selecting the first token embedding of each statement, which is used to represent the statement as a whole. These vectors are then concatenated and added to another positional embedding matrix to form an embedding matrix $Z^0_i \in \mathbb{R}^{d \times n}$ to serve the classifier models. In the classification stage, the processed embedding is processed through another series of encoders to learn the connections between statements. The final output is projected by a linear layer and put through a softmax function, resulting in an output matrix $\hat{Y}_i \in \mathbb{R}^{n \times c}$, where $c$ is the number of classes. The predicted result is then obtained by selecting the class with the highest probability.
+   } \label{fig:train}
+\end{figure*}
+
+\subsection{Overview of the approach} \label{sec:Overview}
+
+\par The process of training our model to detect vulnerable code involves three main phases, as illustrated in Figure \ref{fig:overview}. The first phase is data preprocessing, which involves three sub-steps for extracting and normalizing function gadgets from Python files. Particularly, in step 1, we extract all user-defined names from the input file using the Python AST module of Python. Step 2 involves extracting all statements from the file, labeling them based on vulnerable code patches from GitHub commits, and grouping them into function gadgets in the same order as they appear in the original function. The final step of phase 1 (step 3) is used for code normalization, in which all user-defined names saved from step 1 are replaced with symbolic names. The output of phase 1 is a collection of $N$ function gadgets, denoted as $\mathbf{D}=\{\mathbf{d_1, d_2, .., d_N}\}$, where each function gadget $\mathbf{d_i}=(\mathbf{s}i, \Vec{y}i)$ consists of $n$ normalized statements $\mathbf{s_i}=\{s_{i1}, s_{i2},..., s_{in}\}$ and a vector $\Vec{y}_i=\{y_{i1},y_{i2},...,y_{in}\}$ containing corresponding labels.
+\par In phase 2, unlike previous approaches that isolated feature extraction and classification into different stages \cite{VUDENC, vuldeekeeper, vuldeepeeker2}, an end-to-end approach is used where all statements in function gadgets $\mathbf{d_i}$ are fed into the model for a unified training  process. Specifically, as illustrated in figure \ref{fig:train},  given a collection of statements $\mathbf{s_i}$, the model will extract the feature embeddings on the fly and feed them to the classifier model for prediction. The final output  is a matrix $\hat{Y}_i \in \mathbb{R}^{n \times c}$ that contains the probability distribution of all classes for each statement. The objective of this approach is to learn the mapping from the input statements to the desired output without splitting the feature extractor and classifier into different models that are not related to each other, thus saving more time and cost required to train these models separately. This also results in a theoretically improved performance as the entire system is trained to enhance the overall pipeline,  in which both models are trained and optimized at the same time to minimize the weighted cross-entropy loss $l_{ij}$ for each statement $s_{ij} \in \mathbf{s_i}$. Specifically, by utilizing an end-to-end training strategy, the classifier is able to give the feature extractor more signals so that it can learn to recognize the most important features that represent vulnerable patterns, which can also later help the classifier to produce better predictions for the statement-level SVD task. 
+
+\par In Phase 3, the trained model, along with the entire pipeline, is utilized to conduct inference and evaluation on unseen function gadgets. The evaluation process is carried out in diverse scenarios, which includes testing the performance of the DetectBERT model on different hyperparameter settings and comparing it with other GNN-based methods such as GAT and GCN. Furthermore, experiments to test the model's ability to withstand adversarial attacks are  also conducted by performing the SVD task on the original and the augmented versions of the evaluating dataset. in which all user-defined methods and variable names are replaced by random strings. More details regarding these evaluation scenarios will be provided in section \ref{sec:experiments}.
+% Giải thích các họat động tổng quan của hệ thống
+\subsection{Data Preprocessing And Labeling}\label{sec:FE}
+At this phase, the source codes from both the previous and updated versions of a GitHub commit are fed into the data preprocessing pipelines.
+\subsubsection{Code normalizing}
+\par Given a Python source file, to ensure that the model has access to the relevant feature required to provide accurate predictions, we need to normalize the source code by eliminating any inconsistencies such as variables, input parameters, and function names. These unpredictable names, commonly referred to as noise, pose a challenge for deep-learning-based approaches as they prevent the models from generalizing to new, unseen data. In step 1, the process of collecting all user-defined names from the Python code is initiated by utilizing the built-in Abstract Syntax Tree (AST) module of Python. 
+\par Specifically, when a Python file is parsed by the AST module, an AST object is generated, which represents the source code as a tree structure of nodes. Each node in the tree corresponds to a syntactic element in the program, such as a variable declaration or an if statement, and is labeled with a syntax category like "If", "FunctionDef" or "Assign". In our study, we utilized this information to extract user-defined names from code segments that create or assign values to variables or define new functions, while ignoring components that represent API or function calls.
+
+\par The collected names are saved into a Python dictionary, which serves as a reference point for replacing any other appearance or usage throughout the source file in step 3. This two-step normalization process is necessary because the original line numbers of every statement need to be maintained for the labeling process, as the AST module removes any lines that are empty or contain only comments. By normalizing the data, the model can be prevented from memorizing unnecessary syntax features and enhance the robustness and reliability in predicting vulnerable patterns.
+\subsubsection{Statements  extracting \& labeling}
+\par The AST module is also used to extract functions and statements. While all functions are extracted from the prior code version of each commit, to minimize duplicates in the data, we only consider functions that contain added lines in the updated source code version. All docstrings within each function are also removed as they are related to vulnerable patterns and may negatively impact the performance of the model. To process a function into a gadget, it is first divided into individual statements. The processed statements are then stripped of all tabs, trailing spaces, and new line escapes and reassembled in their original order to form a function gadget. To label a statement as vulnerable, the information about starting and ending line numbers is retrieved to check if any vulnerable lines fall within this span. Additionally, unlike other datasets that contain only functions\cite{devign, Are}, all import statements are extracted, as there may be an unsafe or corrupted module imported into the code, these import lines are also grouped together and treated as a function gadget.
+
+\par  In the labeling process, since manual labeling is not feasible due to the lack of domain knowledge and limited resources,  deleted lines in each commit are leveraged as a basis for identifying vulnerabilities. However, as discussed in section \ref{sec:I}, there might be many potential false positives in the ground truth labels, so to help better clean the data,  more criteria are applied to label a changed line as vulnerable or not. First, To reduce the duplication rate in the original datasets \cite{VUDENC},  only the last commit per issue is exploited, as there are cases when developers commit multiple times to patch the vulnerable code before closing one issue. Second in a commit, if the deleted lines contain only empty lines or comments, it can be safely assumed that the line is not vulnerable. On the other hand, given a deleted line with valid content if there is no identical line present in the added lines we can keep it in the vulnerable lines list. The intuition behind this approach is based on our assumption that there are cases where the deleted lines themselves are not actually vulnerable but when combined with a specific context they will form a vulnerable pattern. Moreover, the developer can also simply change the line number without changing the content of the line.
+% Giải thích các trích xuất feature (trích xuất graph, normalize code, extract feature cho từng node.
+\subsection{Model building and training}\label{sec:ME}
+
+% Giải thích về model (kiến trúc, các lớp), giải thích thật cụ thể và đưa công thức toán vào.
+\par Transformers such as BERT\cite{bert} and its variants\cite{distilbert,albert, longformer, xlnet} have gained a lot of popularity in Natural Language Understanding (NLU) tasks, including token classification, sequence classification, and extractive question-answering. Similarly, these transformers can also be applied to the field of programming languages. This is because both programming languages and natural languages share similarities in terms of abstraction and the ability to describe complex ideas through the use of syntax, and a set of vocabulary. As illustrated in figure \ref{fig:train}, the architecture of DetectBERT consists of two distinct Transformer encoders, each with a specific mission. The first encoder acts as a feature extractor  for all statements in a gadget, while the second encoder is tasked with learning the relationships between those feature vectors in order to produce a classification output.
+\subsubsection{Feature extractor} \label{sec:MFE}
+
+
+\par The chosen architecture for the feature extractor utilizes transformer encoders \cite{bert} architecture that outputs dynamic contextualized embedding instead of traditional static embedding methods\cite{doc2vec,word2vec,glove, fasttext}. When it comes to detecting vulnerabilities in Python, we can benefit from pre-trained models that have already been trained on vast amounts of Python code. A Recent empirical study \cite{Embeds_comparison} also demonstrated that the use of BERT for extracting representation vectors for Python consistently outperforms other static embedding methods, such as Word2Vec \cite{word2vec} and fast-text \cite{fasttext}, across almost all experiments for vulnerable code detection. Moreover, there are various models available \cite{mpnet,minilm,codebert} that utilize diverse unsupervised learning techniques to comprehend the relationships between code tokens in different programming languages. Some of these models have been trained in multiple languages, making it easy to expand our approach to other programming languages in the future.
+\par As denoted in section \ref{sec:Overview},  given a function gadget $\mathbf{d_i}=(\mathbf{s_i}, \Vec{y_i})$ in the dataset $\mathbf{D}$, we have $\mathbf{s_i}=(s_{i1},s_{i2}...,s_{in})$ represent all statements and $\Vec{y_i}=(y_{i1},y_{i2}...,y_{in})$ denotes the labels associated with each statement. Before inputting the statements into the representation learning model, they are initially broken down into tokens using the Wordpiece tokenization algorithm\cite{wordpiece}. As a result of tokenization, the length of each statement may differ, so to align the statements with the model's requirements, they are padded to match the length of the longest statement. Suppose the length of the longest statement is larger than the maximum embedding size allowed by the model, in that case, the input will be truncated, meaning that some portion of the statement beyond the maximum size will be discarded.  The statement preprocessing stage can be represented by the following formula:
+\begin{equation} \label{equa:FE1}
+\mathbf{X}^0=\text{Embedding}(\text{Tokenize}(\mathbf{s_{i}})) + PE\end{equation}
+In the formula \ref{equa:FE1},  the resulting arrays of tokens are then fed into an embedding layer to produce an input embedding matrix  for each statement.  In order to incorporate positional information into the model, the fixed positional encoding method was employed which is described in section 3.5 of the paper \cite{attention}. PE is the generated positional embedding  that is added to the input embedding matrix for each statement. The final output of the formula \ref{equa:FE1} is the embedding tensor  $\mathbf{X}_i^0=\{X_{i1}^0, X_{i2}^0,...X_{in}^0\} \in \mathbb{R}^{n \times s \times d}$  with  $n$ as the number of statements in each gadget, $s$ as the longest statement length, and $d$ as the hidden dimension of each embedding vector.
+\begin{figure}[h]
+    \centering
+    \input{mask.tikz}
+    \caption{At every self-attention layer of each encoder block of the feature extractor, to emphasize the features that contribute to vulnerable patterns,  all attention weights related to symbolic names, which are defined in the first step of the data preprocessing phase, are filtered out. This is done by adding a mask matrix $M$ to the attention matrix $A$.
+   } \label{fig:mask}
+\end{figure}
+\par As illustrated in Figure \ref{fig:train}, the input embedding tensor $\mathbf{X}^0$ is fed to a series of encoders. Each encoder block in the feature extractor models utilizes the multi-head self-attention mechanism, to extract the representation vector of each statement. For simplification, the formula of the self-attention layer will be formulated with a single head. Let the $\mathbf{X}_i^l$ embedding tensor be the input of the $l^{th}$ encoder block, for each $X_{ij}^l \in \mathbf{X}_i^l$ with $j\in\{1,2,3,...,n\}$, $n$ is the number of statements in the current function gadget, we have:
+\begin{equation} \label{equa:FE2}
+\text{MaskedAttention}(Q,K,V) = \text{Softmax}\bigg(\frac{QK^T}{\sqrt{d_k}} + \text{M}\bigg) V\end{equation}
+\begin{equation} \label{equa:FE3}
+A_{ij}^{l} = \text{MaskedAttention}(X_{ij}^lW_Q^l, X_{ij}^lW_K^l, X_{ij}^lW_V^l)W^l_O
+\end{equation}
+\begin{equation}\label{equa:FE4}
+X_{ij}^{l+1} = \text{LayerNorm}(\text{MLP}( \text{LayerNorm}(A_{ij}^{l} +X_{ij}^l))+ A_{ij}^l)\end{equation}
+
+\par The three equation \ref{equa:FE2}, \ref{equa:FE3} and \ref{equa:FE4} has three primary components: 'MaskedAttention', 'MLP', and 'LayerNorm'. The 'MLP' function is responsible for creating a fully connected feed-forward neural network, while 'LayerNorm'  use the layer normalization technique \cite{layer_norm} to normalize the layer values to ensure consistent and well-scaled data, the 'MaskedAttention' function refers to the self-attention layer that involves several sets of trainable weights denoted as $W_Q^l$, $W_K^l$, $W_V^l$, and $W_O^l$, each with a size of $d \times d$.  In order to prevent certain tokens, such as the symbolic names 'VAR\_2', 'VAR\_3', and 'VAR\_4', from being attended to by other tokens, we apply an attention mask matrix, denoted as $M$  that has the same size as the attention score matrix,  the two matrices are then added together to obtain the final attention scores. In the case of multi-head self-attention, the sizes of $W_Q^l$, $W_K^l$, and $W_V^l$ are adjusted to be $d \times (d/\text{number of heads})$ and the results of all heads from the 'MaskedAttention' function must be concatenated before multiplied by $W_O^l$.
+
+\par In essence, the process of representation learning involves training weights that can distribute attention scores among different pairs of token embedding which determine the importance of each token in relation to the others.  Moreover, in order to ensure that the training data remains consistent, the attention signal is excluded from user-defined names and instead focused on the parts of the current statement that potentially contain vulnerable code, such as API calls, user input validation, database queries, and so on. This process allows the model  to gain a deeper understanding of the semantics of the input statements and allows the model to learn patterns in the data that are relevant to identifying potential vulnerabilities in the code base. 
+
+\par Finally, after passing through all the layers of the encoder in the feature extractor model, the resulting embedding tensor $\mathbf{X}_i^l$ is sent through a pooling layer to extract the final representation vector for each statement. This is achieved by selecting the first token embedding of each matrix $X^l_{ij}$, indicated by the $[CLS]$ token, as the representation vector of a whole statement. Let's denote the output of the last encoder layer as $l*$, we have:
+\begin{equation}\Vec{z}_{ij} = \text{CLSPooling}(X^{l*}_{ij})\end{equation}
+Each embedding vector $\Vec{z}_{ij}$ is then used as an input to the classifier model, which will be discussed in the following section.
+
+\subsubsection{Classifier} \label{sec:classifier}
+
+\par The learning process in the classifier model follows the same pattern as that of the feature extractor. The only notable difference is that instead of using an embedding layer, we directly utilize the output representation vectors from the feature extractor.  
+\begin{equation}\label{equa:cls1}
+Z^0_{i}=\concat_{j=1}^{n}\Vec{z}_{ij} + PE\end{equation}
+\begin{equation}\label{equa:cls2}
+\text{Attention}(Q,K,V) = \text{Softmax}\bigg(\frac{QK^T}{\sqrt{d_k}}\bigg) V\end{equation}
+\begin{equation}\label{equa:cls3}
+A_{i}^{l} = \text{Attention}(Z_{i}^lW_Q^l, Z_{i}^lW_K^l, Z_{i}^lW_V^l)W^l_O
+\end{equation}
+\begin{equation}\label{equa:cls4}
+Z_{i}^{l+1} = \text{LayerNorm}(\text{MLP}( \text{LayerNorm}(A_{i}^{l} +Z_{i}^l))+ A_{i}^l)\end{equation}
+\par In the equation \ref{equa:cls1},  || is the concatenate operation and PE is the position embedding matrix $PE$ used to help the model understand the position of each statement in the original function. The input for the classifier model is an embedding matrix $Z^0_{i} \in \mathbb{R}^{n \times d}$ representing the embedding matrix for the function gadget $\mathbf{s}_i$. This matrix undergoes another series of encoders, similar to the feature extractor, but this time all statements are attended to without any mask, as shown in equations \ref{equa:cls2}, \ref{equa:cls3}, and \ref{equa:cls4}. Let $l*$ denote the final encoder layers we have:
+\begin{equation} \label{equa:cls5} \hat{Y}_i= \text{Linear}(Z_{i}^{l*}) = W^CZ_{i}^{l*} \end{equation}
+In equation \ref{equa:cls5}, $W^C$ is the learnable weights of size $d \times c$ that is used to project embeddings matrix  $Z_{i}^{l*}$ to the matrix $\hat{Y}_i \in \mathbb{R}^{n \times c}$ where $c$ is the number of classes. For each $j$ in $\{1,2,..n\}$ and $k$ in $\{0,2,..,c-1\}$, we can get the predicted labels $\mathbf{\Vec{\hat{y}}_i}$ for all statements $\mathbf{s_i}$ by choosing the class index $k$ with the highest values in each vector $\Vec{\hat{y}}_{ij} \in \hat{Y}_i$.
+
+\begin{equation}\Vec{\hat{\mathbf{y}_{i}}} = \concat_{j=1}^{n}\argmax_k (\hat{y}_{ijk})\end{equation}
+
+
+\subsubsection{End-to-end training} \label{sec:training}
+In a real-world scenario, our primary objective is to pinpoint the specific code statements that are potentially suspicious and require the developer's attention for further investigation. Therefore, it is more important for a model to accurately identify all instances of vulnerable code, rather than  avoiding false positive predictions. To accomplish this, we assign weights to all statements in the dataset and use the weighted cross-entropy (WCE) loss to train the model.
+
+Let's denote  $\theta$ as the parameters of  the deep learning model $f$. For each function gadget $\mathbf{d_i}= (\mathbf{s_i}, \Vec{y}_i)$ that have $n$ statements, the loss function is:  \begin{equation}
+L_i(\theta) 
+= \sum _{j=1}^{n}\frac{l_{ij}(f(s_{ij}, \theta),y_{ij})}{\sum _{i=1}^{n} w_{y_{ij}}}
+= \sum _{j=1}^{n}\frac{l_{ij}(\Vec{\hat{y}}_{ij},y_{ij})}{\sum _{i=1}^{n} w_{y_{ij}}}
+\end{equation}
+\begin{equation}l_{ij} = w_{y_{ij}} \log \bigg ( \frac{{\exp(\hat{y}_{ij(y_{ij})}})}{\sum_{k=0}^{c-1} \exp(\hat{y}_{ijk} )}\bigg )\end{equation}
+The loss function $L_i$ is defined as the weighted sum of all statement losses. To optimize the model's parameters and minimize the loss, we perform  the mini-batch stochastic gradient descent with a batch size of $n$, which also means that the model parameters are updated based on a function gadget at a time. During the training process, the adaptive gradient algorithm AdamW \cite{adamW} is used  with a linear scheduled learning rate of $1\times 10^{-5}$.
+Let's $w_{y_{ij}} \in \{w_0, w_1, w_2,..,w_{c-1}\}$ denotes the weight assigned to each statement $s_{ij}$, which is calculated based on the frequency of the label $y_{ij}$ in the dataset, and the total number of samples.
+\begin{equation}w_{y_{ij}}= \frac{s}{c \times s_{y_{ij}}}\end{equation}
+Here, $s$ is the total number of statements of all functions gadgets in our dataset, $c$ is the number of classes, and $s_{y_{ij}}$ is the number of statements that have label $y_{ij}$.
+
+
+\section{Experiments} \label{sec:experiments}
+\par Throughout our experiments,  the models were trained to perform multi-class classification tasks on the entire dataset instead of separately training multiple models for binary classification with only a subset of data related to a specific CWE, as was done in a previous study by Wartschinski et al.\cite{VUDENC}. This decision was based on the fact that vulnerabilities can exist in various forms and in any part of the codebase. Therefore, training the model on a subset of data related to a specific CWE may lead to a lack of generalization,  making the model  become too "naive" and just memorizing some specific pattern from training samples. This becomes even worse when the ground truth labels themselves contain false positives samples. as a result,  apart from false negatives predictions when predicting new unseen samples, the trained models also provide many false positives because they just learned irrelevant patterns from normal code, while not actually learning anything about a vulnerable statement.  
+
+\par By training DetectBERT on the entire dataset with diverse patterns from non-vulnerable and vulnerable statements belonging to multiple CWE, we are able to provide the model with a broader context of the codebase, which was particularly beneficial for dealing with the imbalanced dataset we had, where the number of samples in each CWE varied. Moreover, a multiclass classifier is generally more efficient in terms of cost and time for training and evaluation compared to using multiple binary classifiers for each class. This is because training multiple binary classifiers requires separate training for each one, while a multiclass classifier can be trained in a single step.
+
+
+\subsection{Research questions} \label{sec:RQ}
+To demonstrate the effectiveness and versatility of DetectBERT in the SVD task,  we will answer the following research questions (RQ)\\
+ \textbf{RQ1}: How does adjusting hyperparameters impact the performance of DetectBERT?\\
+ \textbf{RQ2}: To what extent does code normalizing and incorporating attention masks improve DetectBERT's ability to identify vulnerable code?\\
+ \textbf{RQ3}: How does DetectBERT's performance in statement classification compare to baseline GNN architectures?\\
+ \textbf{RQ4}: What are the statement types in which DetectBERT performs particularly well?\\
+
+ \begin{table*}[h]
+\centering
+\begin{tabular}{lllllllllll}
+\toprule
+\Xhline{2\arrayrulewidth}
+\textbf{Dataset} & \textbf{Normal} & \textbf{CWE-22} & \textbf{CWE-77} & \textbf{CWE-79} & \textbf{CWE-89} & \textbf{CWE-352} & \textbf{CWE-601} & \textbf{CWE-94} & \textbf{ \makecell{Total number  of \\ function gadgets }}
+& \textbf{\makecell{Total number\\ of statements}}\\
+\midrule
+\hline
+CVEFixes & 5301 & 68 & n/a & 102 & n/a & 40& 150 & 69 & 15841 & 153919\\
+VUDENC & 13020 &325 & 328 & 58 & 1123 & 526& 246& 215 & 5730 & 57398\\
+\Xhline{2\arrayrulewidth}
+\bottomrule
+\end{tabular}
+\label{table:data_stat}
+\caption{The statistics about the number of function gadgets ($d_i$) containing vulnerable patterns specific to each CWE type. The final two columns present the total number of function gadgets in $d_i$, along with the total number of statements ($s_{ij}$) for both datasets VUDENC and CVEFixes.}
+\end{table*}
+\subsection{Metrics for evaluation}\label{sec:metrics}
+
+\par Since the vulnerable code often accounts for a small portion of the code base, the dataset for vulnerable code detection always results in heavy imbalance distribution. So to evaluate the classification model, the F1 score, precision, and recall were used as metrics to evaluate the performance of the methods used for detecting vulnerable code, which is a common practice in many studies related to this topic \cite{Linevd,MVD}. All of these metrics rely on four main statistical components that are: true positive (TP), true negative (TN), false positive (FP), and false negative (FN). 
+\begin{equation}\label{equa:metric1}Precision= \frac{TP}{TP+FP}\end{equation}
+\begin{equation}\label{equa:metric2}Recall=\frac{TP}{TP+FN}\end{equation}
+\begin{equation}\label{equa:metric3}F1=\frac{2 \times Precision \times Recall}{Precision + Recall}\end{equation}
+\par The formulas above are used in the case of binary classification.  However, since our model is used for multi-label classification problems and the distribution between ground truth labels is also not balanced, we employ the macro-F1, macro-precision, and macro-recall to handle this. 
+
+\begin{equation}\label{equa:metric4}Precision_{macro}= \frac{1}{c} \sum _{i=0}^{c-1}\frac{TP_i}{TP_i+FP_i}\end{equation}
+\begin{equation}\label{equa:metric5}Recall_{macro}= \frac{1}{c} \sum _{i=0}^{c-1}\frac{TP_i}{TP_i+FN_i}\end{equation}
+\begin{equation}\label{equa:metric6}
+F1_{marcro}=\frac{2 \times Precision_{macro} \times Recall_{marco}}{Precision_{macro} + Recall_{macro}}
+\end{equation}
+
+\par In the case of vulnerable code detection, recall measures the fraction of correctly detected vulnerable statements out of all statements that contain vulnerable code, while precision represents the fraction of accurately predicted results among all predicted results. The macro-versions of these metrics aggregate the results across all labels, treating each label equally, which is crucial for imbalanced multi-label classification problems. 
+\par Another metric that was used in our experiment is  the  Area Under the Curve (AUC) score of the Receiver Operating Characteristic (ROC) curve (AUROC). This metric  is frequently utilized to evaluate the performance of a classification model.  While the ROC curve illustrates the balance between the TP rate (sensitivity) and FP rate (1-specificity) for different threshold values, the AUROC score indicates the degree of separability between positive and negative samples in the classification task by calculating the area under the ROC curve that range from 0 to 1. A score of 1 indicates perfect separability, while a score of 0.5 indicates random guessing. In our use case,  The AUROC score can be used to determine the model's ability to confidently distinguish between vulnerable and non-vulnerable code based on the predicted probabilities.  In mathematical terms, the formula for AUROC can be written as:
+\begin{equation} \label{equa:TPR}
+  \mathrm{sensitivity}= Recall =  TPR = \frac{TP}{TP + FN} 
+\end{equation}
+\begin{equation}\label{equa:FPR}
+    1 - \mathrm{specificity} = FPR = \frac{TP}{TN + FP}
+\end{equation}
+\begin{equation} \label{equa:metric7}
+AUROC = \int_{0}^{1} TPR(FPR) \ dFPR
+\end{equation}
+\begin{equation} \label{equa:metric8}
+    \mathrm{AUROC}_{macro} = \frac{\sum_{i=0}^{c-1} \mathrm{AUROC}_i}{c}
+\end{equation}
+
+\par The $TPR(FPR)$ function in equation \ref{equa:metric7}   represent the formula for TPR as a function of FPR depending on the specific classification model being used.  The results of the $TPR(FPR)$ function describe the trade-off between TPR and FPR at various classification thresholds and are typically plotted as the ROC curve. The AUROC is then calculated as the area under this curve. Finally, the $\mathrm{AUROC}_{macro}$ score is calculated in equation \ref{equa:metric8} to represent the confidence of the model the calculate a sample with ground truth label $i \in \{0,1,...,c-1\}$ as $i$ .
+
+\par While the metrics discussed earlier are helpful for evaluating the performance of a model, as mentioned  in the section \ref{sec:I}, it's worth noting that the ground truth labels themselves may not be entirely accurate, and may contain false positives. Therefore, to better analyze the agreement of the models to the provided ground truth label for each type of statement,  the Matthews correlation coefficient (MCC) is  used combined with F1. While F1 is independent of TN predictions, MCC takes into account all four categories of statistical components.
+ \begin{equation}\label{equa:mcc}MCC=\frac{
+ TP\times TN - FP \times FN
+ }
+ {
+ \sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}
+ }\end{equation}
+ \begin{equation} \label{equa:mcc_macro}
+    \mathrm{MCC}_{macro} = \frac{\sum_{i=0}^{c-1} \mathrm{MCC}_i}{c}
+\end{equation}
+ \par In equation \ref{equa:mcc}, the MCC formula produces an output value between -1 and 1, and the equation \ref{equa:mcc_macro} shows the macro average formula for the MCC score of all classes $i\in \{0, 1, 2, ..., c - 1\}$ . When the MCC has a value of 1, it indicates that the model's predictions align perfectly with the provided ground truth labels, otherwise a 0 score indicates a random prediction, and -1 indicates a completely wrong prediction.
+
+\subsection{Datasets} 
+
+\par The VUDENC dataset \cite{VUDENC} is a useful resource for studying code commits that address issues related to  specific Common Weakness Enumerations (CWEs) in open-source repositories. However, the primary limitation of this dataset is the existence of a substantial number of duplicated samples. This leads to severe data leakage problems between the train and test sets, resulting in over-optimistic experimental results. There are three main factors contributing to this issue. Firstly, the preprocessing approach used in VUDENC involves tokenizing all code in a Python file and extracting a slice of code with a fixed window size of $m$ tokens for every $n$ tokens step (in VUDENC $m=200$ and $n=5$). This method generates a large number of overlapping slices, exacerbating the problem of duplicated samples. Secondly, all the data in VUDENC comes from commits that are used to fix Github issues with tags and descriptions related to specific CWEs. Therefore, there might be instances where the same file is fixed multiple times, leading to additional duplicated code slice samples. Lastly, code reuse in open-source projects also contributes to the duplication issue in the VUDENC dataset. To reduce the duplicated sample, the data preprocessing pipeline mentioned in section \ref{sec:FE}  was applied to create a new version of the VUDENC dataset.  
+
+\par To better evaluate DetectBERT's performance, we also used the publicly available CVEFixes dataset in addition to the VUDENC dataset. This ensures the model's effectiveness and reliability in practical settings, thereby contributing to the improvement of security across multiple projects. The CVEFixes dataset was created by collecting Common Vulnerabilities and Exposures (CVE) records from the National Vulnerability Database (NVD) and identifying the relevant GitHub commits that address the vulnerabilities via the attached URLs that are linked to the patching commits. Only records used to patch vulnerabilities in Python were selected by applying a filter to the dataset, which is then further processed to include only the CVE records related to the CWE categories in the VUDENC dataset. The same preprocessing steps are applied to the CVEFixes dataset as well.
+
+
+\par Table \ref{table:data_stat} provides a detailed overview of our processed datasets, including the number of samples for each CWE. The CWEs that are included in our datasets are: 
+\begin{itemize}
+    \item CWE-22\cite{cwe22}: Improper Validation of Input Data. This is a type of vulnerability that arises when input data from external sources is not properly validated before being used by the software, which can lead to various security issues.
+    \item CWE-79\cite{cwe79}: Improper Neutralization of Input During Web Page Generation. This is a vulnerability in web applications that occurs when untrusted user input is not properly sanitized or escaped, which can allow an attacker to inject malicious code into the web page and perform actions on behalf of the victim.
+    \item CWE-77\cite{CWE-77}: Improper Neutralization of Special Elements used in a Command ('Command Injection'). This vulnerability occurs when untrusted user input is passed to a command shell or other interpreter as part of a command, which can allow an attacker to execute arbitrary code or commands on the system.
+    \item CWE-89\cite{CWE-89}:  Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection'). This vulnerability occurs when untrusted user input is not properly sanitized before being used in an SQL query, which can allow an attacker to inject malicious SQL code and access or modify sensitive data.
+    \item CWE-94\cite{cwe94}:  Improper Control of Generation of Code ('Code Injection'). This is a type of vulnerability that occurs when untrusted user input is used to generate executable code, which can allow an attacker to inject and execute arbitrary code on the system.
+    \item     CWE-352\cite{cwe352}: Cross-Site Request Forgery (CSRF). This vulnerability occurs when an attacker is able to trick a victim into performing an action on a website or application that the victim did not intend to perform, by exploiting the victim's existing authenticated session on that site.
+    \item     CWE-601\cite{cwe601}:  URL Redirection to Untrusted Site ('Open Redirect'). This is a vulnerability that occurs when a web application redirects a user to an untrusted or malicious site, which can be exploited by an attacker to steal sensitive information or perform other malicious actions.
+\end{itemize}
+
+\par The datasets were divided into training and testing sets with a ratio of $80:20$. Given that the number of samples in each class varied, with some classes having only a small number of samples, during the evaluation phase, the k-Fold cross-validation technique with $k=5$  was used to ensure that our model was adequately validated and produced robust results.
+
+
+
+\subsection{Pretrained feature extractors}\label{sec:feature_extractors}
+\begin{table}[h]
+\centering
+\begin{tabular}{lcccc}
+\Xhline{2\arrayrulewidth}
+\textbf{\makecell{Feature\\ extractor}} & \textbf{\makecell{Num\\ layers}} & \textbf{Hidden size} &  \textbf{Pooling} & \textbf{Model size} \\
+ \hline
+ MiniLM\cite{minilm} &  12  & 384 &  CLS pooling & 120 MB\\
+ mpnet\cite{mpnet} & 12 & 768 &  CLS pooling & 420 MB\\
+\Xhline{2\arrayrulewidth}
+\end{tabular}
+\caption{Throughout our experiments, we utilized two models - MiniLM and mpnet - for extracting embedding vectors from Python statements and evaluated their impact on the performance of the models. }
+\label{table:Embedding}
+\end{table}
+In our Python vulnerability detection experiments, two different embedding models, mpnet and MiniLM, are  utilized as feature extractors for our DetectBERT models. The mpnet has a hidden size of 768, while MiniLM has a hidden size of 384. Both models were pre-trained using contrastive learning objective \cite{sbert} on a massive corpus of over one billion sentence pairs, consisting of both natural languages and code. The training corpus for code included pairs from multiple programming languages, such as Python, Javascript, Ruby, Go, Java, and PHP, which were obtained from the CodeSearchNet dataset\cite{husain_codesearchnet_2019}. Table \ref{table:Embedding} provides additional information about these feature extractors such as the number of encoder layers, the pooling strategy, and the model size.
+\subsection{Experiment results}
+This section offers  information about how each experiment was conducted for each of the research questions (RQ) outlined in section \ref{sec:RQ}. It includes details on the selection and preparation of the data and models, as well as the empirical results obtained.  Also, insights regarding  results are also discussed to answer those RQs. 
+\subsubsection{Experiment results for RQ1}
+\begin{table}[h]
+\centering
+\begin{tabular}{cccccc}
+\toprule
+\Xhline{2\arrayrulewidth}
+\textbf{\makecell{Hidden\\ size}} & \textbf{\makecell{Num \\ heads} }& \textbf{\makecell{Num \\ layers}} & \textbf{\makecell{F1 score\\ (F1)}} & \textbf{\makecell{Precision\\ (Prec)}} & \textbf{\makecell{Recall\\ (Rec)}}\\
+\midrule
+\hline
+\multirow{20}{*}{$h_{MiniLM}=384$}     & \multirow{4}{*}{2}  
+         & 3  &62.86 & 56.38 &72.26\\
+    &    &\rowcolor{gray!15}  6  &64.23 & 58.74 &73.41 \\
+    &    & 9  &57.58 & 48.77 &75.84  \\
+    &    &\rowcolor{gray!15}  12 &57.31 & 49.55 &73.52 \\
+\cline{2-6}
+    & \multirow{4}{*}{4}  & 3  &67.07 & 64.89 &71.27  \\
+    &    &\rowcolor{gray!15}  6  &65.54 & 58.46 & \textbf{76.26}  \\
+    &    & 9  &49.70 & 42.50 &74.11 \\
+    &    &\rowcolor{gray!15}  12 &64.70 & 61.59 &70.21  \\
+\cline{2-6}
+    & \multirow{4}{*}{6}  & 3  &70.71 & 67.12 &75.54 \\
+    &    &\rowcolor{gray!15}  6  &57.58 & 49.19 &73.99 \\
+    &    & 9  &61.85 & 53.86 &74.90 \\
+    &    &\rowcolor{gray!15}  12 &65.65 & 62.55 &70.43\\
+\cline{2-6}
+    & \multirow{4}{*}{12} & 3  &\textbf{71.33} & \textbf{71.10} &73.40  \\
+    &    &\rowcolor{gray!15}  6  &57.13 & 50.17 &70.26  \\
+    &    & 9  &66.10 & 63.84 &70.87\\
+    &    &\rowcolor{gray!15}  12 &60.92 & 53.12 &73.96\\
+\cline{2-6}
+    & \multirow{4}{*}{24} & 3  &62.75 & 57.96 &71.22 \\
+    &    &\rowcolor{gray!15}  6  &63.43 & 55.45 &76.15\\
+    &    & 9  &62.05 & 54.28 &74.87\\
+    &    &\rowcolor{gray!15}  12 &56.14 & 47.85 &71.64\\
+\hline
+\multirow{20}{*}{$h_{mpnet}=768$} 
+    & \multirow{4}{*}{2} & 3  &71.07 & 69.50 &74.90\\
+    &    &\rowcolor{gray!15}  6  &69.37 & 65.56 &74.70 \\
+    &    & 9  &65.54 & 63.80 &70.28 \\
+    &    &\rowcolor{gray!15}  12 &64.18 & 59.39 &74.21 \\
+\cline{2-6}
+    & \multirow{4}{*}{4}  & 3  &\textbf{74.47} & \textbf{77.10} &72.39\\
+    &    &\rowcolor{gray!15}  6  &70.60 & 66.77 &75.42\\
+    &    & 9  &64.93 & 59.38 &73.35\\
+    &    &\rowcolor{gray!15}  12 &63.02 & 58.72 &72.06\\
+\cline{2-6}    
+    & \multirow{4}{*}{6}  & 3  &63.98 & 56.23 &\textbf{77.85}\\
+    &    &\rowcolor{gray!15}  6  &68.54 & 65.22 &73.93 \\
+    &    & 9  &63.57 & 58.64 &74.21 \\
+    &    &\rowcolor{gray!15}  12 &59.64 & 66.28 &63.05 \\
+\cline{2-6}    
+    & \multirow{4}{*}{12} & 3  &72.27 & 73.00 &72.15\\
+    &    &\rowcolor{gray!15}  6  &71.96 & 69.16 &76.47\\
+    &    & 9  &60.56 & 54.05 &71.60\\
+    &    &\rowcolor{gray!15}  12 &69.31 & 69.06 &71.62\\
+\cline{2-6}
+    & \multirow{4}{*}{24} & 3  &72.37 & 69.69 &76.47\\
+    &    &\rowcolor{gray!15}  6  &69.26 & 65.36 &74.07\\
+    &    & 9  &63.66 & 59.39 &70.37\\
+    &    &\rowcolor{gray!15}  12 &72.22 & 75.11 &69.96\\
+\Xhline{2\arrayrulewidth}
+\bottomrule
+\end{tabular}
+\label{table:hyperparam_result}
+
+\caption{The experiment involved training multiple models on a combined dataset comprising samples from processed VUDENC and CVEfixes, each with its own set of hyperparameters. These models were trained using the training strategy discussed in section \ref{sec:training} for a duration of 100 epochs. The experimental results showed that the models with the best performance had larger hidden sizes, such as $h_{mpnet}=768$, and had three classifier layers. }
+\end{table}
+\par \textbf{Data and model preparation}: To explore how hyperparameters can influence the performance of machine learning models, it is often necessary to experiment with various hyperparameter configurations. In our study, we attempted to optimize the DetectBERT model's hyperparameters by adjusting the hidden size, number of encoders, and number of attention heads in the classifier model. To be more efficient in terms of both cost and time,  the VUDENC and CVEfixes datasets were merged for training and evaluation. This was also necessary, since as shown in table \ref{table:data_stat}, the CVEfixes dataset contained a limited number of samples related to classes CWE-89 and CWE-77.  All the models are trained for 100 epochs using the training strategy discussed in section \ref{sec:training}.
+
+\begin{figure*}[h]
+    \centering
+    \includesvg[width=\textwidth, align=center]{RQ2_H.svg}
+    \includesvg[width=\textwidth, align=center]{RQ2_Head.svg}
+    \caption{Plots that are created to illustrate how DetectBERT performs on three metrics - F1, precision, and recall  scores - with different parameters. The red lines in the plots represent models with hidden sizes of 384, while the blue lines represent models with hidden sizes of 768.}
+ \label{fig:RQ1_graphs}
+\end{figure*}
+
+
+\par \textbf{Experiment results}: Detailed breakdown of the observed results can be found in table \ref{table:hyperparam_result}, we have also created a series of subplots in figure \ref{fig:RQ1_graphs} to help visualize how the different hyperparameters were correlated to the performance of the model.
+\par From the results in Figure \ref{fig:RQ1_graphs}, it is noticeable that larger hidden sizes in models generally lead to better performance in all metrics. Specifically,  when comparing models with hidden size $h=384$ to those with $h=768$,  the smaller models achieved competitive recall scores ranging from 69.96\% to 77.85\%,  However, given the same set of other hyperparameters (number of classifier layers and attention heads), the larger models consistently achieved better precision scores of 54\% to 77\% compared to smaller models, which ranged from 42\% to 71\%. Consequently, the larger models also achieved better F1 scores ranging from 59\% to 74\%, while smaller models with hidden size ($h=384$) only achieved F1 scores ranging from 49\% to 71\%. Overall, these results align with previous studies such as \cite{attention, bert} which suggest that larger hidden sizes enable models to capture more complex features, thus improving their ability to generalize to new data. 
+
+\par Another pattern  that can be observed is that the number of encoder layers in the classifier model did not have a significant impact on the performance of DetectBERT. In fact, models with fewer classifier layers tended to perform better. One possible explanation for this observation is the risk of overfitting. When the number of encoder layers is high, the model may become too specialized for the training data, resulting in poor generalization performance on new data. Therefore, using fewer classifier layers might provide a better balance between model complexity and generalization ability. To prove this point, we also provide details about how DetectBERT work behind the scene in appendix \ref{sec:behind_the_scene}
+
+\par Regarding the number of attention heads, our empirical results suggest that having more  many attention heads does not necessarily imply any improvement in the final performance. In reality, too many attention heads could cause the hidden size to be divided into very small sub-dimensions leading to missing necessary features for each head. The most stable and optimal number of attention heads was found to be 12  for  both $h=384$ and 24 for $h=768$.
+
+\par In conclusion, for optimal performance in our study, a model with a larger hidden size of $h_{mpnet}=768$ for both the feature extractor and classifier is suggested. While models with 6 classifier layers can be considered, we recommend using a model with only 3 classifier layers as we have observed more stable performance during the training phase with such models. And as suggested for $h_{mpnet}=768$, the ideal number of attention heads is $24$. 
+\begin{table*}[h]
+\centering
+\begin{tabular}{|c|c|c|lcccccccc|}
+\toprule
+
+\Xhline{2\arrayrulewidth}
+
+\textbf{\makecell{Evaluate\\scenarios}} & \textbf{Dataset} & \textbf{\makecell{Normalized }} & \textbf{Metric} & \textbf{CWE-22} & \textbf{CWE-77} & \textbf{CWE-79} & \textbf{CWE-89} & \textbf{CWE-352} & \textbf{CWE-601} & \textbf{CWE-94}&\textbf{Average}\\
+\midrule
+\hline
+
+
+\multirow{16}{*}{Normal}
+&\multirow{8}{*}{CVEFixes}
+&\multirow{4}{*}{False}
+ 
+&     F1 &\textbf{51.61}& n/a &53.66& n/a &80.95&72.09& \textbf{90.41} & 69.74\\
+
+&&    &\rowcolor{gray!15} Prec&\textbf{61.54}& n/a &\textbf{91.67}& n/a &85.00&81.58& \textbf{94.29} &\textbf{82.82}\\
+&&    &Rec&44.44& n/a &37.93& n/a &77.27&64.58& 86.84&62.15\\
+&&    &\rowcolor{gray!15}  AUROC &63.74& n/a &\textbf{77.71}& n/a &\textbf{98.69}&90.79& 95.65 & 85.30\\
+\cline{3-12}
+&&\multirow{4}{*}{True}
+
+    &     F1 & 42.30& n/a &\textbf{54.55}& n/a &\textbf{93.02}&\textbf{75.48}& 86.19&\textbf{70.30}\\
+
+&&&\rowcolor{gray!15} Prec&36.36& n/a &57.69& n/a &\textbf{95.24}&\textbf{88.57}& 82.50 &72.67\\
+ 
+&&&Rec&\textbf{50.56}& n/a &\textbf{51.72}& n/a &\textbf{90.91}&\textbf{65.76}& \textbf{90.23}&\textbf{69.83}\\
+
+&&&\rowcolor{gray!15}  AUROC&\textbf{80.12}& n/a &77.42& n/a &97.81&\textbf{94.43}& \textbf{99.64}&\textbf{89.88}\\
+    \cline{2-12}
+
+
+&\multirow{8}{*}{VUDENC}
+&\multirow{4}{*}{False}
+&     F1 &\textbf{63.42}&\textbf{66.67}&\textbf{42.90}&\textbf{64.88}&\textbf{72.38}&\textbf{73.25}& \textbf{78.79}&\textbf{66.04}\\
+
+&&    &\rowcolor{gray!15}   Prec&\textbf{52.82}&\textbf{73.50}&\textbf{40.09}&\textbf{67.80}&\textbf{66.20}&\textbf{65.44}& \textbf{77.38}&\textbf{63.30}\\
+
+&&    &Rec&79.37&60.99&46.15&62.20&79.83&\textbf{83.18}& 80.25&70.28\\
+  
+&&    &\rowcolor{gray!15}    AUROC &\textbf{92.38}&\textbf{92.77}&\textbf{84.72}&86.43&93.51&96.27& 89.94&90.86\\
+\cline{3-12}
+&&\multirow{4}{*}{True}
+&     F1 &50.41&64.23&39.75&51.37&60.78&48.75& 66.33&54.52\\   
+   
+&&    &\rowcolor{gray!15}   Prec&36.60&66.17&33.33&42.41&47.21&34.72& 55.93&45.19\\   
+
+&&    &Rec&\textbf{80.95}&\textbf{62.41}&\textbf{49.22}&\textbf{65.14}&\textbf{85.29}&81.78& \textbf{81.48}&\textbf{72.32}\\
+
+&&    &\rowcolor{gray!15}    AUROC&91.59&88.30&79.64&\textbf{88.68}&\textbf{95.76}&\textbf{97.35}& \textbf{94.13}&\textbf{91.77}\\
+\hline
+
+\multirow{16}{*}{Augmented}
+&\multirow{8}{*}{CVEFixes}
+&\multirow{4}{*}{False}
+&     F1 &23.08 & n/a & \textbf{27.03}& n/a & 58.82& 69.23& 67.80&49.20\\
+
+&&    &\rowcolor{gray!15}   Prec&\textbf{37.50} & n/a & \textbf{62.50} & n/a & 83.33& \textbf{90.00}& \textbf{95.24}&\textbf{73.71} \\
+
+&&    &Rec&16.67 & n/a & 17.24& n/a & 45.45& 56.25& 52.63&37.64\\
+ 
+&&    &\rowcolor{gray!15}    AUROC &\textbf{64.36} & n/a & 68.09& n/a & \textbf{99.04}& 90.50& 97.53&82.70\\
+\cline{3-12}
+
+&&\multirow{4}{*}{True}
+&     F1 &\textbf{30.30}& n/a & 24.00& n/a & \textbf{74.29}& \textbf{73.81}& \textbf{77.92}&\textbf{56.06}\\
+
+&&    &\rowcolor{gray!15}   Prec&33.33& n/a & 28.57& n/a & \textbf{100.00}& 86.11& 76.92&64.99\\
+  
+&&    &Rec&\textbf{27.78}& n/a & \textbf{20.69}& n/a & \textbf{59.09}& \textbf{64.58}& \textbf{78.95}&\textbf{50.22}\\
+
+&&    &\rowcolor{gray!15}    AUROC &63.89& n/a & \textbf{74.46}& n/a & 98.62& \textbf{94.34}& \textbf{99.04}&\textbf{86.07}\\ 
+\cline{2-12}
+
+&\multirow{8}{*}{VUDENC}
+&\multirow{4}{*}{False}
+
+&     F1 &48.48& \textbf{48.11}& \textbf{45.45}& \textbf{45.45}& \textbf{71.16}& \textbf{48.33}& \textbf{50.82}&\textbf{51.11}\\
+ 
+&&    &\rowcolor{gray!15}   Prec&\textbf{66.67}& \textbf{71.83}& \textbf{55.56}& \textbf{62.30}& \textbf{71.31}& \textbf{59.59}& \textbf{75.61}&\textbf{66.12}\\  
+
+&&    &Rec&38.10& 36.17& 38.46& 35.78& 71.01& 40.65& 38.27&42.63\\
+
+&&    &\rowcolor{gray!15}    AUROC &90.76& 82.94& 76.28& 78.89& 94.54& 91.55& 85.77&85.81\\
+\cline{3-12}
+
+&&\multirow{4}{*}{True}
+&    F1 &\textbf{53.41}& 45.85& 29.41& 43.97& 50.97& 42.58& 50.22&45.19\\
+  
+&&    &\rowcolor{gray!15}   Prec&41.59& 51.79& 23.81& 38.54& 36.82& 31.35& 39.44&37.62\\
+  
+&&    &Rec&\textbf{74.60}& \textbf{41.13}& \textbf{38.46}& \textbf{51.19}& \textbf{82.77}& \textbf{66.36}& \textbf{69.14}&\textbf{60.52}\\
+
+&&    &\rowcolor{gray!15}    AUROC&\textbf{91.51}& \textbf{89.24}& \textbf{78.43}& \textbf{88.69}& \textbf{96.53}& \textbf{97.02}& \textbf{91.78}&\textbf{90.45}\\
+\Xhline{2\arrayrulewidth}
+
+\bottomrule
+\end{tabular}
+\label{table:RQ2_result}
+\caption{The table presents the outcomes of the DetectBERT models in experiments for RQ2, in both normalized and unnormalized versions of the two datasets - VUDENC and CVEFixes. The empirical  data contains the models' performance on various metrics, such as f1, precision, recall, and AUROC score, in two evaluation scenarios, which are the standard test set and augmented test sets, where random strings substituted user-defined names like variable and method names. }
+\end{table*}
+\subsubsection{Experiment results for RQ2}
+
+
+\par This section will discuss the data and the experiment results that are conducted to assess the contribution  of the code normalization steps and the attention mask $M$, which are introduced in sections \ref{sec:FE} and \ref{sec:ME} respectively,  to the performance of DetectBERT. 
+\par \textbf{Data preparation}:  Experiments are conducted separately with two versions of each dataset - VUDENC and CVEFixes. The first version contained unprocessed function gadgets with the original code, while the second version replaced all inconsistencies such as user-defined variable names, method names, and class names with symbolic names like 'VAR\_1' and 'FUNC\_3'. The models used in this experiment are then trained on both versions of the datasets and evaluated in two scenarios:
+\begin{itemize}
+    \item In the first scenario, we split the data into a train and test set with an 80:20 ratio. The model is then trained using the train and evaluation splits respectively.
+    \item In the second scenario,  the datasets are also split into train and test sets with the same ratio, but the test set is augmented by replacing all user-defined variables and method names with random strings such as 'a', 'b', 'c', etc. This was done to evaluate the robustness of the model against adversarial attacks where the same vulnerable pattern may be disguised by features that are not relevant to the vulnerable pattern.
+\end{itemize}
+\par In this experiment,  the two datasets CVEfixes, and VUDENC were not concatenated like in RQ1, as we wanted to evaluate the consistency of the model's performance across different data distributions. Both scenarios utilized k-fold cross-validation for a more accurate evaluation.
+\par \textbf{Models preparation}: As demonstrated in the previous analysis for RQ1, the performance of the model improves as the hidden size of the model increases. Therefore, in this experiment, the pre-trained mpnet model was chosen as the feature extractor and a classifier that contains 3 layers of transformer encoders was also employed. To assess the effectiveness of the attention mask $M$ combined with code normalization, a different feature extraction approach was used depending on whether the dataset was normalized or unnormalized. Specifically, as discussed in section \ref{sec:MFE} for processed datasets,  an attention mask was applied to eliminate the attention signal generated by the symbolic names. Our hypothesis is that this approach can enable the model  to focus more effectively on the actual vulnerable patterns, and identify the relevant features that are important for the classification task. On the other hand, for unprocessed datasets, the standard self-attention layer was used for feature extraction.
+
+\par \textbf{Results}: Table \ref{table:RQ2_result} provides a detailed description of the results obtained from our experiment. A trade-off between precision and recall was observed when training the model on normalized and unnormalized datasets in both scenarios. 
+\par Particularly, our empirical results showed that models trained on normalized datasets outperformed models trained on unnormalized datasets in terms of recall  scores in both scenarios. In the normal scenario, models trained on normalized code achieved an average recall score of 69.83\% for CVEfixes and 72.32\% for VUDENC, while models trained on the original code had slightly lower recall scores, with 62.15\% for CVEFixes and 70.28\% for VUDENC. The difference in the recall scores of the models trained on normalized and unnormalized data was even more significant in the second scenario, with models trained on unnormalized data achieving significantly lower recall scores (37.64\% for CVEFixes and 42.63\% for VUDENC), while the recall scores for models trained on normalized code were less affected (50.22\% for CVEFixes and 60.52\% for VUDENC).
+
+\par In contrast, models trained on unnormalized data had better precision than those trained on normalized data, except for CWE types such as CWE-352 and CWE-601 in the CVEfixes dataset. Specifically, the average precision score for models trained on unnormalized code was 82.82\% for CVEFixes and 63.30\% for VUDENC, outperforming models trained on normalized code, which achieved a precision score of 72.67\% for CVEFixes and 45.19\% for VUDENC. The same pattern was observed in the second scenario, where the precision scores dropped for both normalized and unnormalized models, but the precision scores of models trained on unnormalized data (73.71\% for CVEFixes and 66.12\% for VUDENC) remained higher than those of models trained on normalized data (64.99\% for CVEFixes and 37.62\% for VUDENC).
+
+\par This phenomenon, is also what we wanted  since in the SVD task,  a high recall score  indicates the model's ability to withstand adversarial attacks and accurately identify patterns in vulnerable code statements. Another insight from the table \ref{table:RQ2_result} is that models trained on normalized datasets produce better AUROC scores for most cases. As discussed in section \ref{sec:metrics}, the higher the AUROC score, the better  a model can effectively distinguish between vulnerable and non-vulnerable codes. This implies that models exposed to normalized code are more likely to recognize vulnerable patterns with increased confidence when presented with a vulnerable statement. However, the decrease in precision scores is a concern as it may result in a higher number of false positives that are irrelevant to the predicted vulnerability, thus hindering users from utilizing our model.
+
+
+\par In general, the incorporation of code normalizing plays a crucial role in enhancing the model's ability to identify vulnerable patterns in the code by removing the attention signal from the symbolic names using an attention mask. This approach results in a more aggressive detection process, which leads to a notable improvement in the model's recall. However, it is essential to note that this aggressive detection may also come at the cost of reduced precision. Moving forward to future works, our focus will be on finding solutions to the challenge of maintaining a balance between recall and precision in the detection of vulnerable code.
+ 
+
+\subsubsection{Experiment results for RQ3}
+\begin{figure*}[h]
+    \centering
+    \includesvg[width=\textwidth, align=center]{RQ1_H.svg}
+    \includesvg[width=\textwidth, align=center]{RQ1_L.svg}
+    \caption{We conducted experiments on various classifier architectures, using pre-trained feature extractors explained in section \ref{sec:feature_extractors}. The results were plotted as bar graphs, with the DetectBERT model represented by the green bar, which employed BERT as its classifier, and the other bars indicating GNN-based architectures, which included GCN and GAT.} 
+ \label{fig:RQ3_graphs}
+\end{figure*}
+\textbf{Data  preparation}: In the preparation step for evaluating the effectiveness of DetectBERT compared to GNN-based models (GCN/GAT), apart from the concatenated dataset used in RQ1, which contains function gadgets from both VUDENC and CVEfixes datasets,  another dataset that used CFG as its underlying data structure was created.  In essence, CFG is a representation of the control flow or the path of execution of a program which is an essential tool for analyzing and understanding the behavior of a program. By analyzing the CFG, security analysts can trace and identify potential points of attack or weak spots in the code. Specifically, CFG can help detect vulnerabilities such as  SQL injection and cross-site scripting (XSS)  by analyzing the program's control flow and identifying potential points of input validation or output encoding that may be missing or incomplete. CFG is also a common choice in previous studies \cite{Linevd,Are,devign,DeepWukong,MVD}, in which it is combined with other graph structures (i.e Data Dependency Graph, Call Graph, AST, etc.)  to serve as input for GNN-based models. For a fair comparison,  we reused feature extractor models of DetectBERT listed in table \ref{table:Embedding} to provide dynamic embeddings for GAT/GCN classifier models.  The whole data preprocessing and training pipeline  described in sections \ref{sec:FE} and \ref{sec:ME} respectively, were also applied to extract statements and form function gadgets. However, there is one  extra step to  construct CFG from those function gadgets which is accomplished  using the Python AST module. Figure \ref{fig:cfg} illustrated a sample of constructed  CFG. 
+ 
+\begin{figure}[h]
+    \centering
+    \input{CFG.tikz}
+    \caption{A visualization of a CFG (Control Flow Graph) that has been constructed from the function gadget shown in figure \ref{fig:func_gadget}. The nodes in the graph that have a red background represent vulnerable statements, while the nodes with a green background represent normal statements.}
+ \label{fig:cfg}
+\end{figure}
+ \par \textbf{GNN-base model preparation}:  During the training process  each CFG was treated as a function gadget $d_i$ where each node is a statement $s_{ij}$  that has its corresponding label $y_{ij}$. All statements were then fed to one of the feature extractors shown in table \ref{table:Embedding} to generate contextualized dynamic embeddings.  After that, the generated embeddings  went to a GNN-based model to produce final predictions.  The architectures used for baseline GNNs are Graph Convolution Network (GCN)\cite{GCN} and Graph Attention Network (GAT)\cite{GAT}, which was trained to perform node-level classification tasks to detect potentially vulnerable statements.  To fully compare the performance of DetectBERT and GNN approaches, we conducted several experiments on each architecture using various hyperparameters. Each model was trained on the processed dataset for 100 epochs with the training strategy described in section \ref{sec:training}.
+
+
+
+\par \textbf{Results}: the results are presented in Figure \ref{fig:RQ3_graphs} and Table \ref{table:RQ3_res}.  The top three plots in Figure \ref{fig:RQ3_graphs} demonstrate that increasing the hidden size has a significant positive impact on the performance of the models, as measured by f1 score, precision, and recall. This finding is consistent across all classifier architectures, except for GAT classifiers that use mpnet as their feature extractor. Specifically, our experiment showed that models with hidden size $h_{mpnet}=784$ have an improvement of around $5.8\%$, $7.2\%$, and $3.9\%$ in f1 score, precision, and recall, respectively over models with lower hidden size $h_{miniLM}=384$. These results are aligned with  findings in the previous RQ1, where  a larger hidden size also results in better performance.
+\begin{table}[h]
+\centering
+\begin{tabular}{llll}
+\Xhline{2\arrayrulewidth}
+\textbf{Classifier} &\textbf{F1} &\textbf{Prec}&\textbf{Rec}\\
+ \hline
+\rowcolor{gray!15} 
+ GCN & 40.48 $\pm$ 6.70 &34.18 $\pm$ 6.02 &  58.35 $\pm$ 6.35\\
+ GAT & 33.75 $\pm$ 16.75  & 29.99 $\pm$ 13.99  & 44.53 $\pm$ 22.59\\
+\rowcolor{gray!15} 
+ BERT (DetectBERT) & \textbf{64.88 $\pm$ 5.46} & \textbf{60.71 $\pm$ 8.08} &  \textbf{73.08 $\pm$ 2.65}\\
+\Xhline{2\arrayrulewidth}
+\end{tabular}
+\caption{ Performance of DetectBERT and other GNN-based approaches. we can see that DetectBERT outperforms GCN and GAT in both precision and recall.}
+\label{table:RQ3_res}
+\end{table}
+\par The lower plots of Figure \ref{fig:RQ3_graphs} reveal another pattern.  As the number of encoder layers increases, the performance of all GNN-based models tends to decrease across all metrics. This phenomenon is commonly referred to as the over-smoothing\cite{over_smooth} and over-quashing \cite{over_squash} problems, which can arise in the message-passing mechanism of GNN architectures. Over-smoothing occurs when the GNN model aggregates too much information from neighboring nodes, causing the feature vector of each node to lose its unique characteristics and become overly similar to those of its neighbors. As a result, the model may struggle to distinguish between different nodes and make accurate predictions. On the other hand, over-quashing occurs when the GNN model compresses the information obtained from neighboring nodes, leading to the loss of  critical features for making accurate predictions. Despite these issues in GNN-based models, as the number of encoder layers increased, we did observe a  decline in DetectBERT's precision metric. However, the recall metric, which measures the ability of the model to correctly identify all vulnerable statements, was not significantly affected. This suggests that DetectBERT's ability to capture and retain important information from the input was not compromised as the number of encoder layers increased.
+
+\par Overall,  in all metrics, the performance of DetectBERT outshined that of GNN-based models. As we can see in table \ref{table:RQ3_res}, the average F1, precision, and recall scores of DetectBERT are nearly double those of GCN and GAT approaches, with an improvement of more than $160\%$ in the F1 score, $170\%$ in the precision score, and $140\%$ in the recall score.  One possible explanation for this performance difference is  discussed in section \ref{sec:motivation} and figure \ref{fig:model_view}, where the classifier model of DetectBERT creates multiple attention patterns at each attention head of each encoder layer, this resulted in contextualized vectors that represent combination of multiple weighted graph structures. For instance, a DetectBERT classifier with 12 attention heads and a hidden size of 768 is equivalent to incorporating 12 distinct graph structures at each encoder layer, with each node having an embedding vector of size 64 ($768/12 = 64$).
+\par In conclusion, these empirical results provide strong evidence in favor of using transformer-based models such as DetectBERT for vulnerable statement classification tasks, especially in scenarios where a larger number of encoder layers are needed to capture complex patterns in the data. By utilizing the power of transformers, we  can avoid the over-smoothing and over-quashing issues often associated with GNN models, while still achieving high levels of accuracy and recall. 
+
+
+\subsubsection{Experiment results for RQ4}\label{sec:RQ4}
+\par \textbf{Data and model preparation}: In this section, we evaluate DetectBERT's ability to detect vulnerabilities in various types of Python statements. First processed statement $s_{ij}$  was  categorized into statement types, such as "Return", "Condition", "For/While", "Assign", "Expression", "Assert", "Import From", "Augmented assignment", "Import", "Function declaration", and "Docstring". To assess the effectiveness of DetectBERT on each type of statement, separate experiments are conducted on two datasets, CVEFixes and VUDENC,  to analyze if the same types of statements are accurately classified as vulnerable in both datasets.  The model architecture trained in the RQ2 experiment was reused and evaluated. Through this analysis, we aim to identify the common types of vulnerable statements that typically contain vulnerable patterns, as well as the degree of agreement between the models and the ground truth labels for each statement type. 
+\begin{table}[h]
+\centering
+\begin{tabular}{lllll}
+\Xhline{2\arrayrulewidth}
+\textbf{Type} & \textbf{\makecell{Number of\\ statements}} &\textbf{F1} & \textbf{MCC} & \textbf{AUROC}\\
+\hline
+Condition        & 1660 & 83.99 & 0.8238 & 0.9819\\
+\rowcolor{gray!15} 
+Return           & 1110 & 87.20 & 0.8767 & 0.9441\\
+Assign           & 3524 & 72.42 & 0.6928 & 0.8530\\
+\rowcolor{gray!15} 
+Expression             & 1697 & 73.07 & 0.6819 & 0.7694\\
+For/While             & 251  & 49.96 & 0.8156 & 0.6606\\
+\rowcolor{gray!15} 
+Assert           & 79   & 41.33 & 0.6986 & 0.5480\\
+Import From      & 365  & 33.12 & 0.4163 & 0.4571\\
+\rowcolor{gray!15} 
+Augmented assignment& 44   & 16.66 & 0.0000 & 0.0000\\
+Import           & 115  & 16.66 & 0.0000 & 0.0000\\
+\rowcolor{gray!15} 
+Function declaration & 67  & 16.62 & 0.0000 & 0.0000\\
+Docstring        & 393  & 16.64 & 0.0000 & 0.0000\\
+\Xhline{2\arrayrulewidth}
+\end{tabular}
+\caption{Performance of DetectBERT on each statement type in CVEFixes}
+\label{table:RQ4_cve}
+\end{table}
+
+\begin{table}[h]
+\centering
+
+\begin{tabular}{lllll}
+\Xhline{2\arrayrulewidth}
+\textbf{Type} & \textbf{\makecell{Number of\\ statements}} &\textbf{F1} & \textbf{MCC} & \textbf{AUROC}\\
+\hline
+Expression           & 4983 & 69.42 & 0.5852 & 0.9082\\
+\rowcolor{gray!15} 
+Assign               & 9001 & 62.79 & 0.5940 & 0.9031\\
+Return               & 2629 & 51.17 & 0.4768 & 0.8816\\
+\rowcolor{gray!15} 
+Import  From          & 1122 & 48.87 & 0.4057 & 0.8045\\
+For/while            & 756  & 47.52 & 0.5185 & 0.7717\\
+\rowcolor{gray!15} 
+Condition            & 3613 & 43.85 & 0.4492 & 0.7655\\
+Augmented assignment & 170  & 45.43 & 0.6758 & 0.6158\\
+\rowcolor{gray!15} 
+Import               & 674  & 29.17 & 0.3572 & 0.5503\\
+Assert               & 192  & 48.07 & 0.7405 & 0.4998\\
+\rowcolor{gray!15} 
+Docstring            & 918  & 12.50 & 0.0000 & 0.0000\\
+Function declaration & 2827 & 12.48 & 0.0000 & 0.0000\\
+\Xhline{2\arrayrulewidth}
+\end{tabular}
+\caption{Performance of DetectBERT on each statement type in VUDENC}
+\label{table:RQ4_VUDENC}
+\end{table}
+
+
+\par \textbf{Results}: Tables \ref{table:RQ4_cve} and \ref{table:RQ4_VUDENC} present the evaluation results of DetectBERT for each statement type from the evaluation subsets of the CVEFixes and VUDENC datasets, respectively. The tables report performance metrics such as F1-score, MCC, and AUROC. The first column in both tables lists the statement type being evaluated, while the second column shows the number of samples available for each statement type. All statements type are arranged based on the AUROC score in the descending order
+
+\par In the CVEFixes dataset, the model performs exceptionally well in detecting vulnerabilities in "Return", "Condition", "For/While", "Assign" and "Expression" statements, as it achieved the highest scores for all metrics. However, the model seems to struggle in identifying vulnerabilities in "Augmented assignment," "Import," "Function declaration," and "Docstring" statements, with scores being very low or zero. This could be attributed to the limited number of samples available for these types of statements or the fact that they are not actually vulnerable, which is a positive signal indicating that the model can distinguish between statements that have the potential to contain vulnerable patterns and the statements that are labeled as vulnerable just because it is deleted in the commits that patch the vulnerable code.
+
+\par On the other hand, the performance metrics in the VUDENC dataset are more evenly distributed due to the larger number of samples available. Nonetheless, the same pattern observed in the CVEFixes dataset can be seen, where the model performs  best in detecting vulnerabilities in "Condition", "Assign", "Expression", "Return", and "For/While" statements with very high AUROC scores.
+\par In summary, the performance of DetectBERT is consistent across both datasets. Our approach has shown to be effective in detecting vulnerabilities in specific types of statements such as "Return", "Condition", "For/While", "Assign" and "Expression". These results align with real-world coding environments where these types of statements are more likely to contain vulnerable defects.
+
+\section{Discussion and future works}
+This section provides a concise report about the limitations of our DetectBERT approach as well as the potential approaches that can be used in future works.
+\subsection{Limitations} \label{sec:limitation}
+
+\subsubsection{Data limitation}
+Both VUDENC and CVEFixes datasets used in this study come with their own set of limitations that can affect the validity and generalizability of the model.
+
+\par One limitation of VUDENC is the presence of duplicated data in the train and test datasets, which can lead to data leakage and overfitting during model training. Although we have made efforts to remove duplicate samples by eliminating identical files from commits that patch the same issue, there may still be cases where there are nearly duplicated files due to code reuse practices in different open-source projects. For the  CVEFixes dataset, one limitation is that the number of commits that patch vulnerabilities in Python is still limited, which can limit the ability of the model to generalize over the new and unseen data. Moreover, for the CVEfixes dataset  to be up-to-date the data collection pipeline of CVEFixes  needs to be re-run which might cost more than 3 days for each run. 
+
+\par Another limitation of VUDENC and CVEFixes is that they focus on vulnerabilities that are patched by source code changes, which may not accurately reflect the full range of vulnerabilities present in software systems. Furthermore, the dataset only includes vulnerabilities that have been publicly disclosed and patched, which can bias the results towards known vulnerabilities and overlook other vulnerable patterns that are missed due to commits that partially solve the problem or the developer just overlook the vulnerable issue.
+
+\subsubsection{Data preprocessing pipeline limitation}
+
+\par The DetectBERT model heavily relies on the AST module for its data preprocessing pipeline. However, when it comes to parsing and extracting function gadgets from large files with more than 1000 lines, the AST module can be really slow. This can lead to long processing times, which can limit the range of use cases for the model, especially in situations where fast processing times are necessary, such as in real-time or low-latency applications. Moreover, the AST module for Python3 cannot parse source code from older Python versions, limiting the scalability of our approach. 
+\par Additionally, another issue with the data preprocessing pipeline is that the files are parsed into function gadgets, which also limits the context of the SVD model to a functional unit. This can make it challenging for the model to detect more complex or nuanced vulnerabilities that require a broader context or reasoning from other functions.
+
+\subsubsection{Model limitation}
+\par Overall, DetectBERT is a versatile approach to detecting software vulnerabilities using only BERT-based language models. However, there are still some limitations to be aware of when using this model.
+
+\par  One key limitation of DetectBERT is its computational complexity, which is primarily caused by the self-attention layers. The model includes two layers that contain multiple transformer encoders, resulting in a significant demand for computational resources during both training and inference. The high computational complexity can limit the scalability of the model and make it less accessible to researchers and developers who do not have access to powerful computing resources.
+
+\par While DetectBERT has shown promising results in the  SVD  task for SAST,  another limitation is that DetectBERT may not be suitable for all types of software vulnerability detection tasks. Particularly, our approach is not suitable to be used in real-time or low-latency applications (e.g in IoT devices) where speed and efficiency are critical.
+
+\label{sec:con1}
+
+
+
+\subsection{Future works}
+\label{sec:con3}
+DetectBERT has shown promising results in the SVD task, however, there is  still a lot of room for improvement. In this section,  We will discuss potential approaches for future work that can be categorized into two groups: data-centric approaches and model-centric approaches.
+\subsubsection{Data-centric improvement}
+
+\par To enhance the efficiency and scalability of DetectBERT, exploring alternative data preprocessing methods could be a promising approach. Currently, the model relies heavily on the AST module, which may be time-consuming and inefficient when extracting function gadgets from large files. Future research could investigate the use of other parsing techniques or tools that offer faster processing times. Another potential solution is to incorporate part-of-speech (POS) tagging, a technique used in NLP to tag sentences or words in a paragraph by analyzing the context. 
+
+\par Another important area of improvement is the availability of training data for different programming languages. While there is a significant amount of publicly available data for C/C++ \cite{sard, devign, SATE, Draper, Are, Linevd, nvd}, datasets for other programming languages are still limited. Future research should focus on collecting more diverse training data to better train and evaluate the model's ability to detect vulnerabilities in different programming languages. It may also be possible to improve the performance of the model by applying data augmentation techniques such as adding noise perturbations  (replace variables, function names, and strings) to the training data and generating a larger and more diverse set of training data.
+
+\subsubsection{Model-centric improvement}
+
+To further improve the performance of the DetectBERT model, several possible alternative architectures and training strategies can be explored in future research.
+
+One approach that could be considered is utilizing different variants of BERT such as ALBERT\cite{albert}, DistilBERT\cite{distilbert} or other transformer-based architecture such as  XLNet\cite{xlnet}, Reformer\cite{reformer}, Longformer\cite{longformer} and Perceiver\cite{perceiver}, that are designed to reduce the space and enhance the speed of the model. In addition, other pre-train strategies for feature extractors could also be explored to further enhance the performance of the DetectBERT model. One potential approach is utilizing contrastive learning objectives \cite{constrastive_learn} to pre-train the model for the SVD task. This involves comparing two or more code statements and minimizing the statements that have the same labels while maximizing the distance between the same that have different labels.
+
+In our study,  we focused on removing the need to construct graphs for source code in the SVD task. However, recent research has explored the use of transformer architecture on graph data and achieved impressive results in tasks that require graphs as the underlying data structure. Notable previous works include Graph Transformer\cite{graph_trans}, Spectral Attention Networks\cite{spectral}, Graph Relative Positional Encoding Transformer\cite{GRPE}, Edge Augmented Transformer\cite{EGT}, Graphormer\cite{graphormer} and TokenGT \cite{tokengt}. By utilizing transformers for graphs, researchers have the potential to overcome some limitations of graph neural networks, such as scaling to larger and denser graphs and increasing model size without over-smoothing.
+
+
+
+\section{Related work}
+\begin{table*}[h]
+\centering
+\begin{tabular}{lllllll}
+\Xhline{2\arrayrulewidth}
+\textbf{Name} & \textbf{Dataset} &  \textbf{Model used} & \textbf{Model type} &  \textbf{Granularity} & \textbf{Language}\\ [0.5ex] 
+\hline
+\rowcolor{gray!15} 
+Vuldeepeeker (2018)\cite{vuldeekeeper} & SARD\cite{sard} + Draper\cite{Draper} & Word2vec\cite{word2vec} + BLSTM\cite{LSTM} & Sequence & Slice & C/C++\\ 
+$\mu$Vuldeepeeker (2018)\cite{vuldeekeeper} & SARD\cite{sard} + Draper\cite{Draper} & Word2vec\cite{word2vec} + BLSTM\cite{LSTM} & Sequence & Slice & C/C++\\ 
+\rowcolor{gray!15} 
+SySeVR (2018)\cite{SySeVR} & SARD\cite{sard} + Draper\cite{Draper} & word2vec\cite{word2vec} + BLSTM\cite{LSTM} & Sequence & Slice & C/C++ \\ 
+VulDeeLocator (2020) \cite{VulDeeLocator} & SARD\cite{sard} + NVD\cite{nvd} & Word2vec\cite{word2vec} + BGRU\cite{GRU} & Sequence & Slice & C/C++\\ 
+\rowcolor{gray!15} 
+VUDENC (2022)\cite{VUDENC} & VUDENC\cite{VUDENC} & Word2vec\cite{word2vec} + LSTM\cite{LSTM} & Sequence & Slice & Python\\ 
+Devign (2019)\cite{devign} &  Devign\cite{devign} & Word2vec\cite{word2vec} + GGNN \cite{GGNN}& Graph & Function & C/C++\\ 
+\rowcolor{gray!15} 
+Reveal (2020)\cite{Are} &  Reveal\cite{Are} & Word2vec\cite{word2vec} + GGNN\cite{GGNN} & Graph & Function & C/C++\\ 
+DeepWukong (2021)\cite{DeepWukong} & SARD\cite{sard} + Redis + Lua &  Doc2Vec\cite{doc2vec} + GCN/GAT\cite{GCN,GAT} &  Graph & Function & C/C++\\ 
+\rowcolor{gray!15} 
+IVdetect (2021)\cite{IVDetect} & SARD\cite{sard} + NVD\cite{nvd} &  GloVe\cite{glove} + GRU\cite{GRU} + FA-GCN\cite{IVDetect} &  Graph & Statement & C/C++\\ 
+Linevd (2022)\cite{Linevd} & Big-Vul\cite{Linevd} &  CodeBERT\cite{codebert} + GAT/GCN\cite{GCN,GAT} & Graph & Statement & C/C++\\ 
+\rowcolor{gray!15} 
+MVD (2022)\cite{MVD} &  MVD\cite{MVD} &  Doc2Vec\cite{doc2vec} + FS-GNN\cite{MVD} & Graph & Statement & C/C++\\ 
+ DetectBERT (2023) & VUDENC\cite{VUDENC} + CVEfixes\cite{cvefixes} & BERT variants\cite{mpnet,codebert,minilm} + BERT\cite{bert} & Transformers & Statement & Python\\ 
+\Xhline{2\arrayrulewidth}
+\end{tabular}
+\caption{A summary of the different deep learning approaches used in recent years (from 2018 to 2022), including the type of embedding and model architecture employed in each study, as well as the datasets utilized for training and evaluation.}
+\label{table:related_work}
+\end{table*}
+
+\par  We introduce this section to provide a comprehensive overview of the use of deep learning techniques for vulnerability detection in recent years (from 2018 to 2022), to help position our work in the larger context of the field. We will focus mainly on two perspectives: the architecture of the deep learning model and the level of granularity of these works.
+
+\subsection{Sequence-based models}
+\par  Sequence-based/RNN-based models, such as LSTM\cite{LSTM}, GRU\cite{GRU}, Bidirectional-LSTM(BiLSTN), and Bidirectional-GRU(BiGRU), have been extensively used for analyzing sequence or time-series data. In the domain of detecting vulnerabilities in source code, the data is typically partitioned into code slices where all slices are tokenized into a sequence of tokens and then fed to an RNN-based model. Since most previous works\cite{vuldeekeeper,vuldeepeeker2,SySeVR,VulDeeLocator,VUDENC} for slice-level SVD are performed using the same kind of architecture (LSTM, GRU) and embedding method. Typically,  static embedding techniques, such as word2vec\cite{word2vec}, are often employed to extract representation vectors, which are then fed into an RNN-based model, like BiLSTM or BiGRU, for classification. Therefore, many approaches have a data-centric methodology, where different techniques are used in the data preprocessing steps to enhance the final performance of the model. 
+
+\par For instance, Vuldeepeeker\cite{vuldeekeeper} obtains library/API function calls from training programs, consolidates relevant program "slices", tokenizes them, applies a trained Word2Vec\cite{word2vec} model, and then employs a BiLSTM for binary classification. On the other hand, $\mu$Vuldeepeeker\cite{vuldeepeeker2} introduces the concepts of "code attention" using code slices to capture local and global information and combine them to obtain a complete feature representation.  The intuition behind "slices" in these studies  is based on the idea that only certain lines of code are essential for predicting vulnerabilities. Therefore, instead of analyzing the entire code, slices from "interesting points" such as API calls, array indexing, and pointer usage are considered for prediction, while the rest of the code is excluded.
+\par  SysSeVR\cite{SySeVR} presents a framework for automatically extracting Syntax-based Vulnerability Candidates (SyVCs) and Semantics-based Vulnerability Candidates (SeVCs). SyVCs refer to pieces of code in a program that may be vulnerable based on syntax analysis, while SeVCs extend to incorporate other semantically related statements. Similarly, VulDeeLocator\cite{VulDeeLocator} also leverages program analysis and deep learning techniques to generate SeVCs and remove false positives by extracting tokens from the source code based on SyVCs. The intermediate code is used to identify semantically related statements, which are encoded into vectors and then employed to train a neural network for vulnerability detection. The resulting output specifies the vulnerability location, yielding a more precise outcome. As far as we know, VUDENC\cite{VUDENC} is the only work that has developed a solution for detecting vulnerabilities in Python code. VUDENC uses tokenization to extract overlapping code slices, where each slice consists of 200 tokens. The authors employ word2vec and LSTM for feature extraction and classification.
+
+
+\subsection{Graphs-based models}
+\par Recent years have witnessed a surge in the popularity of graph neural network (GNN)-based methods for detecting vulnerable patterns in source code. These methods use graph structures that represent statements as nodes, thereby enabling the combination of feature vectors of each statement and its neighbors. Unlike slice-level methods, which consider feature vectors in isolated slices, GNN-based methods explicitly train feature vectors of each statement combined with contextual features such as edges and neighbor nodes, thereby potentially enhancing the model's ability to detect relevant patterns. To the best of our knowledge, GNN-based methods are currently considered the dominant approach in this field and have been found to achieve state-of-the-art results. Here we will only mention some of the most notable studies
+
+
+\par For function-level vulnerable code detection, there are approaches such as Devign\cite{devign} and Reveal\cite{Are}, that focus on detecting vulnerabilities at the function level. These approaches utilize word2vec in conjunction with Gated Graph Recurrent Layers (GGNN) \cite{GGNN} to generate embedding vectors from various graph structures, including Abstract Syntax Trees (AST), Code Property Graphs (CPG), Control Flow Graphs (CFG), Data Dependencies Graphs (DDG), Data Flow Graphs (DFG), and Natural Code Sequences (NCS).  DeepWukong \cite{DeepWukong} is another approach for detecting bugs in software programs, which first constructs a Program Dependence Graph based on control flow and data-flow information. It then generates subgraphs or slices of the PDG using forward and backward traversal starting from a program point of interest. During the detection phase, control and data dependencies of a target program are extracted, symbolized, and embedded by Doc2Vec\cite{doc2vec} to feed into trained GNNs like GCN\cite{GCN} or GAT\cite{GAT} models for graph classification.
+
+\par Recently, there has been an increasing focus on the use of Graph Neural Networks (GNNs) to achieve statement-level classification for identifying software vulnerabilities. One prominent example of this approach is IVDetect\cite{IVDetect}, which uses a Program Dependence Graph (PDG) to differentiate vulnerable code from surrounding contextual code. IVDetect then employs a Graph Convolution Network (GCN)\cite{GCN} with feature-attention (FA-GCN) to perform graph-based classification. The GNNExplainer\cite{GNExplainer} is also utilized to identify crucial program dependencies and statements that are most relevant to the detected vulnerability. Another model, LineVD\cite{Linevd}, takes a single function of source code as input and processes it into individual statements. This model uses CodeBERT \cite{codebert}to separately embed both function-level and statement-level codes and focuses on data and control dependency information. These features are then fed into GAT or GCN for training and inference. Finally, MVD\cite{MVD} is a method for memory-related vulnerability detection that constructs a PDG with additional semantic information from a Call Graph and reduces noise by conducting program slicing. The statements of each slice are transformed into low-dimensional vector representations using Doc2Vec, and Flow-Sensitive Graph Neural Networks (FS-GNN) are used to learn vulnerability patterns for vulnerability detection at the statement level. These models offer promising avenues for future research in the field of software vulnerability detection.
+\subsection{Position of our approach}
+Our approach DetectBERT can achieve the statement level of granularity without relying on any kind of graph structure. For the features extractor, we used the BERT-based models \cite{mpnet,minilm,sbert} that are pre-trained on multiple programming languages to benefit from the power of transfer learning. The output of the feature extractor is concatenated and fed to another series of encoder blocks to learn the contextual relationship between statements in a Python function.
+
+
+\section{Conclusion}
+
+In this paper, we introduced DetectBERT, a novel architecture that utilizes the self-attention mechanism to detect vulnerable code at the statement level in multiple programming languages. Unlike existing methods that rely on predefined graph structures, DetectBERT is flexible and able to capture contextual interactions between statements. To evaluate its effectiveness, the authors created a new dataset by extracting and normalizing statements from real-world open-source Python projects, resulting in a total of 211,317 statements. Empirical results demonstrate that DetectBERT outperforms other graph-based methods that rely on control flow graphs (CFGs), achieving an average F1 score of 64.88\%, precision of 60.71\%, and recall of 73.08\% for Python. Moreover, the data normalization step also enhances the model's ability to generalize to new, unseen data and increases its robustness against adversarial attacks. In the near future, we are planning to develop our own datasets for multiple programming languages with fewer duplicated samples for better evaluation and further improve the model's performance.
+\bibliography{mybib} 
+\bibliographystyle{ieeetr}
+
+\EOD
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=0.97\textwidth, align=center]{attention_heads.png}
+    \caption{BERTViz \cite{bertviz} is used to visualize attention patterns for each head in a classifier model that contains 6 encoder layers, represented by columns and rows respectively. Here lines that are bolder imply higher attention weights. Each cell in the figure contains a thumbnail version for each head of the following figure \ref{fig:attention_view}, which is specific to the input statements $s_{i}$ of function gadget $\mathbf{d}_i$, which is depicted in figure \ref{fig:func_gadget}.}
+    \label{fig:model_view}
+\end{figure*}
+\section{Appendices}
+\subsection{Inside the classifier model of DetectBERT} \label{sec:behind_the_scene}
+\par In order to understand how the DetectBERT classifier model identifies vulnerable statements, we will examine a use case involving the function gadget shown in Figure \ref{fig:func_gadget}. This function contains statements that are susceptible to SQL injection attacks. Specifically, statements 2 and 3 can be exploited by an attacker who manipulates the input parameters self.name and self.password to insert malicious SQL code into the query. The DetectBERT model used in this experiment used mpnet as the feature extractor and the classifier contain  6 layers of transformers encoder. Figure \ref{fig:model_view} is an illustration of all attention weights that are assigned between each pair of statements in the sample function gadget.
+
+\par From figure \ref{fig:model_view},  it is clear that  by stacking multiple encoder layers that utilize multi-head self-attention mechanisms, the DetectBERT model is able to form various attention patterns in each head, which allows it to cover a wider range of relationships between statements than GNN-based approaches with pre-defined graph structures. Taking a closer look at the way the conditional statement $s_{i5}$ focuses on other statements in figure \ref{fig:attention_view}, we can see that most of the attention heads are able to recognize the two most important statements in the function gadget (number $s_{i2}$ and $s_{i3}$), which contain the SQL statement and are also the center of data-flow and control-flow in this function. Other heads, such as the red and brown heads, tend to pay attention to the two statements that are influenced by the current conditional statement. This insight also shows us that positional encoding has done its job very well.
+
+
+
+\begin{figure}[h]
+  \centering
+    \includegraphics[width=80mm, align=center]{attention_heads_details.png}
+    \caption{A visualization generated by BERTViz\cite{bertviz} that shows how the conditional statement $s_{i5}$ gathers contextualized information from other statements  }
+    \label{fig:attention_view}
+\end{figure}
+ \par In figure \ref{fig:model_view}, it is also noteworthy that at every attention head, as  the contextualized embeddings go to the deeper layer, the attention patterns seem to just focus on the two specific statements which are also the statement that contains vulnerable code.  According to a previous study conducted by Clark et al \cite{bert_insignt}, this phenomenon also means that the models can not find anything else to attend to and choose to bypass the current self-attention layer by choosing to gather the same embedding features as the previous layers. From this intuition, we can easily see that all  heavy-lifting jobs are actually done in the first few layers, and increasing more encoder layers in the classifier models is not necessary. In fact, this might also lead to the overfitting problem which is demonstrated in RQ1.
+ \begin{figure*}[h]
+    \centering
+    \input{embeddings_visualize.tikz}
+    \caption{ The t-SNE algorithm is utilized to visualize the 2D scatter plots of the final embedding vectors of all statements ($s_{ij}$) in the augmented test set. These embedding vectors are generated by the last layer of the encoder model, which has a hidden size of 786, before being projected and classified. Each statement is assigned an `x`  marker with  specific color which represent the ground truth label of the current statement} 
+    \label{fig:embeddings_visualize}  
+\end{figure*}
+\subsection{The effect of code normalization}\label{sec:code_normalization_insight}
+In section is denoted to provide insights about how the code normalization steps described in section \ref{sec:FE} can help the model better resist adversarial attacks. The models  used in RQ2 are utilized to generate embeddings for  visualization.
+
+
+\par  The visualization presented in figure \ref{fig:embeddings_visualize} reveals that both models attempted to differentiate between vulnerable and non-vulnerable statements by separating their embeddings into distinctive regions. The unnormalized code-trained model produced clearer and more isolated clusters of vulnerable embeddings, forming "islands" within the plot, while the normalized code-trained model pushed vulnerable embeddings toward the edges of the two-dimensional planes. 
+\par These findings elucidate why the model trained on unprocessed data achieved higher precision scores, as the isolated "islands" provided a clear boundary to distinguish between vulnerable and non-vulnerable statements. However, the unnormalized code-trained model tended to be overfitted by irrelevant features leading to several false negative cases being missed, which are represented by non-grey markers that are scattered all over the plot. 
+ \par In contrast, the normalized-trained model  was able to identify the underlying patterns and structure of the code, despite the presence of irrelevant features. By removing inconsistencies such as variable and method names,  we can better enhance the model to map statements using the same  API calls, and function calls  into unified vectors that are closer to each other in the vector space. Furthermore, the vulnerable embeddings produced by the normalized model were more prone to being pushed toward the right of the plot.   This also explains why the model trained on normalized code achieved higher recall  and AUROC scores. 
+\subsection{The performance of DetectBERT on C/C++}\label{sec:C++}
+As C/C++ is widely used in previous studies for the source code vulnerability detection task, we also include this section to assess the effectiveness of DetectBERT on a dataset specifically designed for C/C++ programming language and compare its performance with another approach that operates at the same level of granularity ( statement-level). 
+ \par \textbf{Baseline}: In this experiment, the observed results in LineVD \cite{Linevd} is used as a baseline for comparison which is shown in table \ref{table:RQ5_exp_res}. For a brief background, in LineVD, they  extracted statements and constructed  program dependency graphs (PDG)  by combining data flow and control flow relationships between statements. After that, all statements are fed into the CodeBERT \cite{codebert} model for statement-level and function-level feature extraction. Finally,  the generated embeddings are then fed to a GAT or GCN to learn the contextualized information based on the built PDG.  Table \ref{table:RQ5_2}  showed the impact of different experimental settings, as reported in the original paper Linevd\cite{Linevd}, on the performance of graph neural network (GNN) models. The results suggest that using the graph attention network (GAT) for feature learning from program dependence graph (PDG) information is the most effective choice. 
+\begin{table}[h]
+\centering
+
+\label{table:data_stat_c}
+\begin{tabular}{lll}
+\Xhline{2\arrayrulewidth}
+\textbf{} & \textbf{No of function gadgets} & \textbf{No of statements} \\
+\hline
+Non vulnerable & 14858 & 1030313\\ 
+Vulnerable  & 12460 & 31857 \\ 
+\Xhline{2\arrayrulewidth}
+\end{tabular}
+\caption{ In the Devign dataset, the curators did not classify the vulnerability type for each sample, however, most vulnerabilities are memory-related, like buffer overflow, memory leak, crash, and corruption. To extract statements and build function gadgets from C/C++ code,  the PyClang module is used to extract ASTs. Each function gadget is then marked as vulnerable if it contains at least one vulnerable statement, and all statements are labeled using the sample data preprocessing pipeline described in section \ref{sec:FE}. }
+\end{table} 
+\par \textbf{Data preparation}: The dataset used in LineVD is Big-Vul which comprises source code from multiple open-source projects. However, due to time and resource constraints, we were only able to run DetectBERT on the public Devign dataset\cite{devign}. The data preprocessing pipeline used in this experiment was similar to the one used for Python, as described in the previous section \ref{sec:FE}. To extract and standardize statements, PyClang was utilized to obtain the AST for C/C++ code. As the dataset and data processing methods are different, no conclusions can be drawn regarding the performance of DetectBERT versus LineVD. The experimental outcomes presented herein are solely for demonstration and reference purposes. The preprocessed Devign dataset can be found on our Huggingface hub: \url{https://huggingface.co/datasets/EddieChen372/devign_with_norm_vul_lines}
+
+  
+\begin{table}[h]
+\centering
+
+\begin{tabular}{lllll}
+\Xhline{2\arrayrulewidth}
+\textbf{Model} \& \textbf{Graph Type} & \textbf{F1} & \textbf{R}ec & \textbf{Prec} & \textbf{AUROC} \\
+ \hline
+\rowcolor{gray!15} 
+GAT+CDG & 11.5 & 12.0 & 11.2 & 0.657 \\
+GAT+CDG+Func & 30.4 & 49.1 & 22.1 & 0.907\\
+\rowcolor{gray!15} 
+GAT+PDG & 15.0 & 25.4 & 12.1 & 0.703 \\
+GAT+PDG+Func & \textbf{36.0} & 53.3 & \textbf{27.1} & 0.913\\
+\rowcolor{gray!15} 
+GCN+CDG & 8.4 & 14.3 & 6.0 & 0.632 \\
+GCN+CDG+Func & 28.3 & \textbf{55.8} & 19.0 & 0.911 \\
+\rowcolor{gray!15} 
+GCN+PDG & 8.5 & 12.5 & 6.7 & 0.599 \\
+GCN+PDG+Func & 31.0 & 46.0 & 23.5 & 0.905\\
+\rowcolor{gray!15} 
+No GNN & 12.9 & 16.6 & 10.6 & 0.666 \\
+No GNN+Func & 29.6 & 53.7 & 20.5 & \textbf{0.921} \\
+\hline
+\rowcolor{gray!15} 
+Average & 21.1 & 33.8 & 15.8 & 0.780 \\
+\Xhline{2\arrayrulewidth}
+\end{tabular}
+\caption{Performance of GCN and GAT that has been trained and evaluated on Big-Vul dataset to perform node classification task on CDG and PDG. CDG is short for graph control dependency graph which utilizes only control-flow information, while program dependency graph(PDG) applied both data-flow and control-flow knowledge to build graphs from functions.\cite{Linevd}}
+\label{table:RQ5_2}
+\end{table}
+
+\par \textbf{Model preparation}: Two versions of CodeBERT \cite{codebert, zhou2023codebertscore} were used  for feature extraction. The first version is the same model used in LineVD and the other is particularly pre-trained  for C/C++ programming languages. The classifier model is a BERT model that contains three transformer encoder layers.  The architecture and training strategy  is described in section \ref{sec:training} and figure \ref{fig:train}
+
+\par \textbf{Results}: We conducted training of two versions of DetectBERT using the preprocessed Devign dataset for 100 epochs, and the performance outcomes are presented in Table \ref{table:RQ5_exp_res}. The empirical results indicate that utilizing a  feature extractor that is pre-trained in C/C++ leads to better outcomes. Although the overall performance is still low, DetectBERT still demonstrated promising performance in comparison to the empirical results presented in Table \ref{table:RQ5_2}. Specifically, the best DertBERT version attained an F1 score of 31.17\% and an AUROC score of 0.760, which is comparatively good in comparison to the other GNN-based models used in LineVD (with an average F1 score of 21.1 and AUROC score of 0.780). In future research, we plan to expand our evaluation by testing DetectBERT with other publicly available C/C++ datasets to establish a more comprehensive benchmark against other GNN-based approaches designed for C/C++.
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=80mm, align=center]{c_sample.png}
+    \caption{Our model detected a statement that may be vulnerable  to  CWE-119 (buffer overflow) or CWE-787 (out-of-bounds read or write) . Specifically, the statement in line 116, which is marked as vulnerable, allocates a block of memory of size `slice->data\_size` using the `av\_malloc` function. If the allocation fails, the function returns an error `(AVERROR(ENOMEM))`, and the program will free slice and return an error code. However, if `slice->data\_size` is a very large value (for example, if an attacker can control the input to the function), the `av\_malloc` function may fail to allocate enough memory and return a `NULL` pointer. If the program does not handle this error condition properly, it could lead to a buffer overflow or other memory-related vulnerabilities. Therefore, it is important to ensure that the size of the memory block being allocated is within a reasonable range and to check for errors returned by memory allocation functions.}
+    \label{fig:c_sample}
+\end{figure}
+\begin{table}[h]
+\centering
+\begin{tabular}{llllll}
+\Xhline{2\arrayrulewidth}
+\textbf{Dataset}&\textbf{Model} & \textbf{F1} & \textbf{Prec}&  \textbf{Rec}&  \textbf{AUROC}\\
+\hline
+\rowcolor{gray!15} 
+Big-Vul&LineVD-average &21.1 & 15.8  & 33.8 & \textbf{0.780}\\
+Devign&\makecell[align=left]{CodeBERT-base\cite{codebert} + \\ BERT} & 21.2 & 14.5 & \textbf{38.9} & 0.747\\
+\rowcolor{gray!15} 
+Devign&\makecell[align=left]{CodeBERT-C\cite{zhou2023codeBERTscore} +\\ BERT} &  \textbf{31.2} & \textbf{29.8} & 32.7 & 0.760\\
+\Xhline{2\arrayrulewidth}
+\end{tabular}
+
+\caption{Performance of DetectBERT on the Devign dataset compare to the average performance of GNN-based models trained on the Big-Vul dataset in LineVD\cite{Linevd}.  We can see  that DetectBERT achieved competitive performance in every metric.  Particularly, the best DetectBERT model outperforms models used in LineVD in term of the precision score. }
+\label{table:RQ5_exp_res}
+\end{table}
+\end{document}
+

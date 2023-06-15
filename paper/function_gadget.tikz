@@ -1,0 +1,152 @@
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,413); %set diagram left start at 0, and has height of 413
+
+%Shape: Rectangle [id:dp5178477671322261] 
+\draw  [fill={rgb, 255:red, 239; green, 255; blue, 224 }  ,fill opacity=1 ] (449.13,24.67) -- (486.58,24.67) -- (486.58,383.33) -- (449.13,383.33) -- cycle ;
+%Shape: Rectangle [id:dp12894625454637976] 
+\draw  [fill={rgb, 255:red, 239; green, 255; blue, 224 }  ,fill opacity=1 ] (207.77,23.67) -- (436.25,23.67) -- (436.25,381.5) -- (207.77,381.5) -- cycle ;
+%Straight Lines [id:da6258442396381019] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (370.43,59.47) -- (451.6,59.21) ;
+\draw [shift={(454.6,59.2)}, rotate = 179.82] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (7.14,-3.43) -- (0,0) -- (7.14,3.43) -- (4.74,0) -- cycle    ;
+%Straight Lines [id:da520135983630521] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (433.81,133.33) -- (451.6,133.22) ;
+\draw [shift={(454.6,133.2)}, rotate = 179.63] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (7.14,-3.43) -- (0,0) -- (7.14,3.43) -- (4.74,0) -- cycle    ;
+%Straight Lines [id:da7621693394483864] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (310.4,358.39) -- (453.33,357.52) ;
+\draw [shift={(456.33,357.5)}, rotate = 179.65] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (7.14,-3.43) -- (0,0) -- (7.14,3.43) -- (4.74,0) -- cycle    ;
+%Straight Lines [id:da0562112340178782] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (390.67,253.83) -- (452.13,254.25) ;
+\draw [shift={(455.13,254.27)}, rotate = 180.39] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (7.14,-3.43) -- (0,0) -- (7.14,3.43) -- (4.74,0) -- cycle    ;
+%Straight Lines [id:da07585087742541297] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (353.53,280) -- (449.33,280.16) ;
+\draw [shift={(452.33,280.17)}, rotate = 180.1] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (7.14,-3.43) -- (0,0) -- (7.14,3.43) -- (4.74,0) -- cycle    ;
+%Straight Lines [id:da8945437161769698] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (315.84,308) -- (451.6,307.87) ;
+\draw [shift={(454.6,307.87)}, rotate = 179.94] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (7.14,-3.43) -- (0,0) -- (7.14,3.43) -- (4.74,0) -- cycle    ;
+%Straight Lines [id:da8421526195500562] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (312.93,332.4) -- (451.67,332.17) ;
+\draw [shift={(454.67,332.17)}, rotate = 179.9] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (7.14,-3.43) -- (0,0) -- (7.14,3.43) -- (4.74,0) -- cycle    ;
+%Straight Lines [id:da28861365975593056] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}]  (398.67,217.17) -- (450.8,217.58) ;
+\draw [shift={(453.8,217.6)}, rotate = 180.45] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (7.14,-3.43) -- (0,0) -- (7.14,3.43) -- (4.74,0) -- cycle    ;
+%Shape: Rectangle [id:dp20048853091704677] 
+\draw  [dash pattern={on 4.5pt off 4.5pt}] (200.67,28.33) .. controls (200.67,20.05) and (207.38,13.33) .. (215.67,13.33) -- (477,13.33) .. controls (485.28,13.33) and (492,20.05) .. (492,28.33) -- (492,381.67) .. controls (492,389.95) and (485.28,396.67) .. (477,396.67) -- (215.67,396.67) .. controls (207.38,396.67) and (200.67,389.95) .. (200.67,381.67) -- cycle ;
+
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 251; blue, 198 }  ,fill opacity=1 ]  (216.73,47.21) -- (368.73,47.21) -- (368.73,73.21) -- (216.73,73.21) -- cycle  ;
+\draw (292.73,60.21) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{100.63pt}\setlength\topsep{0pt}
+{\fontfamily{pcr}\selectfont def FUNC\_1(self):}
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 251; blue, 198 }  ,fill opacity=1 ]  (216.42,79.51) -- (432.42,79.51) -- (432.42,175.51) -- (216.42,175.51) -- cycle  ;
+\draw (324.42,127.51) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{144.05pt}\setlength\topsep{0pt}
+{\fontfamily{pcr}\selectfont VAR\_9 = ( \ \ }\\{\fontfamily{pcr}\selectfont  \ "select count(*) from users where 		name=\textbackslash '\%s\textbackslash ' and password=\textbackslash '\%s\textbackslash ';"\% (self.name, self.password)}\\{\fontfamily{pcr}\selectfont )}
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 251; blue, 198 }  ,fill opacity=1 ]  (216.29,179.35) -- (397.29,179.35) -- (397.29,234.35) -- (216.29,234.35) -- cycle  ;
+\draw (306.79,206.85) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{120.52pt}\setlength\topsep{0pt}
+{\fontfamily{pcr}\selectfont VAR\_10 = sql.queryDB(}\\{\fontfamily{pcr}\selectfont self.conn, VAR\_9}\\{\fontfamily{pcr}\selectfont )}
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 251; blue, 198 }  ,fill opacity=1 ]  (216.79,238.69) -- (389.79,238.69) -- (389.79,263.69) -- (216.79,263.69) -- cycle  ;
+\draw (303.29,251.19) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{114.95pt}\setlength\topsep{0pt}
+{\fontfamily{pcr}\selectfont VAR\_11 = VAR\_10[0][0]}
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 251; blue, 198 }  ,fill opacity=1 ]  (216.96,267.2) -- (352.96,267.2) -- (352.96,290.2) -- (216.96,290.2) -- cycle  ;
+\draw (284.96,278.7) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{89.9pt}\setlength\topsep{0pt}
+{\fontfamily{pcr}\selectfont  if VAR\_11 == 0:}
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 251; blue, 198 }  ,fill opacity=1 ]  (217.35,293.97) -- (316.35,293.97) -- (316.35,316.97) -- (217.35,316.97) -- cycle  ;
+\draw (266.85,305.47) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{64.86pt}\setlength\topsep{0pt}
+{\fontfamily{pcr}\selectfont  self.clean()}
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 251; blue, 198 }  ,fill opacity=1 ]  (217.46,344.33) -- (309.46,344.33) -- (309.46,366.33) -- (217.46,366.33) -- cycle  ;
+\draw (263.46,355.33) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{60.06pt}\setlength\topsep{0pt}
+{\fontfamily{pcr}\selectfont return False}
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 251; blue, 198 }  ,fill opacity=1 ]  (217.56,320.17) -- (312.56,320.17) -- (312.56,341.17) -- (217.56,341.17) -- cycle  ;
+\draw (265.06,330.67) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{61.66pt}\setlength\topsep{0pt}
+{\fontfamily{pcr}\selectfont return True}
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 184; green, 233; blue, 134 }  ,fill opacity=1 ]  (455.76,51.97) -- (481.76,51.97) -- (481.76,73.97) -- (455.76,73.97) -- cycle  ;
+\draw (468.76,62.97) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{15.08pt}\setlength\topsep{0pt}
+\begin{center}
+0
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 111; blue, 130 }  ,fill opacity=1 ]  (456,122.63) -- (482,122.63) -- (482,144.63) -- (456,144.63) -- cycle  ;
+\draw (469,133.63) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{15.08pt}\setlength\topsep{0pt}
+\begin{center}
+1
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 184; green, 233; blue, 134 }  ,fill opacity=1 ]  (455.1,239.8) -- (481.1,239.8) -- (481.1,261.8) -- (455.1,261.8) -- cycle  ;
+\draw (468.1,250.8) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{15.08pt}\setlength\topsep{0pt}
+\begin{center}
+0
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 184; green, 233; blue, 134 }  ,fill opacity=1 ]  (455.29,268.3) -- (481.29,268.3) -- (481.29,290.3) -- (455.29,290.3) -- cycle  ;
+\draw (468.29,279.3) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{15.08pt}\setlength\topsep{0pt}
+\begin{center}
+0
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 184; green, 233; blue, 134 }  ,fill opacity=1 ]  (455.59,295.17) -- (481.59,295.17) -- (481.59,317.17) -- (455.59,317.17) -- cycle  ;
+\draw (468.59,306.17) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{15.08pt}\setlength\topsep{0pt}
+\begin{center}
+0
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 184; green, 233; blue, 134 }  ,fill opacity=1 ]  (455.43,321.47) -- (481.43,321.47) -- (481.43,343.47) -- (455.43,343.47) -- cycle  ;
+\draw (468.43,332.47) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{15.08pt}\setlength\topsep{0pt}
+\begin{center}
+0
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 184; green, 233; blue, 134 }  ,fill opacity=1 ]  (456.24,347.57) -- (482.24,347.57) -- (482.24,369.57) -- (456.24,369.57) -- cycle  ;
+\draw (469.24,358.57) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{15.08pt}\setlength\topsep{0pt}
+\begin{center}
+0
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [fill={rgb, 255:red, 255; green, 111; blue, 130 }  ,fill opacity=1 ]  (455.29,206.13) -- (481.29,206.13) -- (481.29,228.13) -- (455.29,228.13) -- cycle  ;
+\draw (468.29,217.13) node  [font=\scriptsize] [align=left] {\begin{minipage}[lt]{15.08pt}\setlength\topsep{0pt}
+\begin{center}
+1
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw  [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ]  (341.43,-1.33) -- (363.43,-1.33) -- (363.43,22.67) -- (341.43,22.67) -- cycle  ;
+\draw (344.43,3.07) node [anchor=north west][inner sep=0.75pt]  [font=\small]  {$\mathbf{d_{i}}$};
+% Text Node
+\draw (317.02,25.4) node [anchor=north west][inner sep=0.75pt]  [font=\footnotesize]  {$\mathbf{s_{i}}$};
+% Text Node
+\draw (461.73,27.4) node [anchor=north west][inner sep=0.75pt]  [font=\footnotesize]  {$\Vec{y}_{i}$};
+
+
+\end{tikzpicture}

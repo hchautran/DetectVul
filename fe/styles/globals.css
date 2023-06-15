@@ -1,0 +1,91 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+  width: 900;
+  border-radius: 10px;
+  background: #21252b;
+  padding: 25px 25px 30px;
+}
+
+.cm-line {
+  height: 15px;
+}
+
+pre {
+  min-height: 600px ;
+  width:  800px ;
+}
+
+.wrapper > h2 {
+  color: #4688ea;
+  font-size: 28px;
+  text-align: center;
+}
+
+.body-container {
+  padding: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.code-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px
+}
+
+.in-out-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 5rem;
+}
+
+#detect-button {
+  padding: 0.5rem;
+  border-radius: 10px;
+  font-size: 16px;
+  height: 40px;
+}
+
+pre {
+  max-height: 450px;
+  margin: 0px;
+}
+
+.side-bar {
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
+  height: 14rem;
+  padding: 5px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(5.5px);
+  border: 1px solid rgba(255,255,255,0.18);
+  /* display: none; */
+}
+
+.cwe {
+  font-size: 20px;
+  cursor: pointer;
+}
+

@@ -1,0 +1,21 @@
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,579); %set diagram left start at 0, and has height of 579
+
+%Image [id:dp2901992266768938] 
+\draw (226.89,227.01) node  {\includegraphics[width=205.84pt,height=204.51pt]{wo_mask.png}};
+%Image [id:dp850445924774881] 
+\draw (557.49,227.08) node  {\includegraphics[width=205.27pt,height=204.62pt]{w_mask.png}};
+%Straight Lines [id:da3262834651605835] 
+\draw    (393.46,122.26) -- (393.97,354.06) ;
+
+% Text Node
+\draw (172.72,373.64) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize] [align=left] {Before normalization};
+% Text Node
+\draw (508.31,373.64) node [anchor=north west][inner sep=0.75pt]  [font=\scriptsize] [align=left] {After normalization};
+
+
+\end{tikzpicture}
