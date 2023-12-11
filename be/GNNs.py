@@ -32,21 +32,17 @@ class GATV2Model(torch.nn.Module):
     def __init__(self, in_dim, hidden_dim, num_layers, heads=12 , num_classes=2 ):
         super(GATV2Model, self).__init__()
         torch.manual_seed(12345)
+        self.acts = nn.ModuleList([])
+        self.gnns = nn.ModuleList([])
         self.num_layers = num_layers
-        self.layer1= GATv2Conv(in_dim, hidden_dim, heads=heads, concat=False ,dropout=0.6)
-        self.layer2= GATv2Conv(hidden_dim, hidden_dim, heads=heads, concat=False, dropout=0.6)
-        if num_layers > 3:
-            self.layer3= GATv2Conv(hidden_dim, hidden_dim, concat=False ,heads=heads, dropout=0.6)
-            self.layer4= GATv2Conv(hidden_dim, hidden_dim, concat=False, heads=heads, dropout=0.6)
-            self.layer5= GATv2Conv(hidden_dim, hidden_dim, concat=False, heads=heads, dropout=0.6)
-        if num_layers > 6:
-            self.layer6= GATv2Conv(hidden_dim, hidden_dim, concat=False, heads=heads, dropout=0.6)
-            self.layer7= GATv2Conv(hidden_dim, hidden_dim, concat=False, heads=heads, dropout=0.6)
-            self.layer8= GATv2Conv(hidden_dim, hidden_dim, concat=False, heads=heads, dropout=0.6)
-        if num_layers > 9:
-            self.layer9= GATv2Conv(hidden_dim, hidden_dim, concat=False, heads=heads, dropout=0.6)
-            self.layer10= GATv2Conv(hidden_dim, hidden_dim, concat=False, heads=heads, dropout=0.6)
-            self.layer11= GATv2Conv(hidden_dim, hidden_dim, concat=False, heads=heads, dropout=0.6)
+        for i in range(num_layers):
+            if i == 0: 
+                self.gnn.append(GATv2Conv(in_dim, hidden_dim, heads=heads, concat=False ,dropout=0.6))
+            else:
+                self.gnn.append(GATv2Conv(hidden_dim, hidden_dim, concat=False, heads=heads, dropout=0.6))
+            
+            self.acts.append(nn.ELU())
+            
         
         # self.layers = Sequential(modules=modules) 
         self.out= GATv2Conv(hidden_dim, num_classes)
@@ -54,44 +50,10 @@ class GATV2Model(torch.nn.Module):
 
 
     def forward(self, x, edge_index):
-        x = F.dropout(x, p=0.6, training=self.training)
-        x = self.layer1(x, edge_index)
-        x = F.elu(x)
-        x = F.dropout(x, p=0.6, training=self.training)
-        x = self.layer2(x, edge_index)
-        x = F.elu(x)
-        if self.num_layers > 4:
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer3(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer4(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer5(x, edge_index)
-            x = F.elu(x)
-        if self.num_layers > 7:
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer6(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer7(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer8(x, edge_index)
-            x = F.elu(x)
-        if self.num_layers > 10:
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer9(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer10(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer11(x, edge_index)
-            x = F.elu(x)
+        for i, layer in enumerate(self.gnns):
+            x = layer(x, edge_index)
+            x = self.acts[i](x)
     
-        x = F.dropout(x, p=0.6, training=self.training)
         x = self.out(x, edge_index)
         return x 
 
@@ -99,66 +61,27 @@ class GCNModel(torch.nn.Module):
     def __init__(self, in_dim, hidden_dim, num_layers,  num_classes=2 ):
         super(GCNModel, self).__init__()
         torch.manual_seed(12345)
+        self.acts = nn.ModuleList([])
+        self.gnns = nn.ModuleList([])
         self.num_layers = num_layers
-        self.layer1= GCNConv(in_dim, hidden_dim, dropout=0.6)
-        self.layer2= GCNConv(hidden_dim, hidden_dim, dropout=0.6)
-        if num_layers > 3:
-            self.layer3= GCNConv(hidden_dim, hidden_dim, dropout=0.6)
-            self.layer4= GCNConv(hidden_dim, hidden_dim, dropout=0.6)
-            self.layer5= GCNConv(hidden_dim, hidden_dim, dropout=0.6)
-        if num_layers > 6:
-            self.layer6= GCNConv(hidden_dim, hidden_dim, dropout=0.6)
-            self.layer7= GCNConv(hidden_dim, hidden_dim, dropout=0.6)
-            self.layer8= GCNConv(hidden_dim, hidden_dim, dropout=0.6)
-        if num_layers > 9:
-            self.layer9= GCNConv(hidden_dim, hidden_dim, dropout=0.6)
-            self.layer10= GCNConv(hidden_dim, hidden_dim,dropout=0.6)
-            self.layer11= GCNConv(hidden_dim, hidden_dim,dropout=0.6)
+        for i in range(num_layers):
+            if i == 0: 
+                self.gnn.append( GCNConv(in_dim, hidden_dim, dropout=0.6))
+            else: 
+                self.gnn.append(GCNConv(hidden_dim, hidden_dim, dropout=0.6))
+            
+            self.acts.append(nn.ELU())
         
         # self.layers = Sequential(modules=modules) 
-        self.out= GCNConv(hidden_dim, num_classes)
+        self.out= GATv2Conv(hidden_dim, num_classes)
             
 
 
     def forward(self, x, edge_index):
-        x = F.dropout(x, p=0.6, training=self.training)
-        x = self.layer1(x, edge_index)
-        x = F.elu(x)
-        x = F.dropout(x, p=0.6, training=self.training)
-        x = self.layer2(x, edge_index)
-        x = F.elu(x)
-        if self.num_layers > 4:
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer3(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer4(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer5(x, edge_index)
-            x = F.elu(x)
-        if self.num_layers > 7:
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer6(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer7(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer8(x, edge_index)
-            x = F.elu(x)
-        if self.num_layers > 10:
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer9(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer10(x, edge_index)
-            x = F.elu(x)
-            x = F.dropout(x, p=0.6, training=self.training)
-            x = self.layer11(x, edge_index)
-            x = F.elu(x)
+        for i, layer in enumerate(self.gnns):
+            x = layer(x, edge_index)
+            x = self.acts[i](x)
     
-        x = F.dropout(x, p=0.6, training=self.training)
         x = self.out(x, edge_index)
         return x 
 

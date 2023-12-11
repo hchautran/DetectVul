@@ -586,7 +586,9 @@ if __name__ == '__main__':
     from datasets import load_dataset
 
 
-    ds = load_dataset('EddieChen372/CVEFixes_Python_with_norm_vul_lines')
+    ds = load_dataset('EddieChen372/Vudenc_with_norm_vul_lines')
+    # print(ds['train'][0])
+    ds = load_dataset('EddieChen372/Vudenc_with_norm_vul_lines')
     print(ds)
     
     # print(ds['train']['type'])
@@ -606,12 +608,13 @@ if __name__ == '__main__':
         func_cls=False
     ) 
     trainer = DetectBERTTrainer(config=config, log=False)
-    trainer.load('/data/thesis/data/models/mpnet_cvefixes_w_masked')
-    path = '/data/thesis/data/models'
+    # trainer.run_train()
+    # trainer.load('/data/thesis/data/models/mpnet_cvefixes_w_masked')
+    # path = '/data/thesis/data/models'
     
    
-    print(trainer.push_to_hub(path, 'mpnet_cvefixes_w_masked'))
+    # print(trainer.push_to_hub(path, 'mpnet_cvefixes_w_masked'))
     
 
-    trainer.evaluate()
+    # trainer.evaluate()
     
