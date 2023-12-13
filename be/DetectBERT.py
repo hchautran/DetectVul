@@ -28,7 +28,7 @@ import wandb
 import json
 
 accelerator = Accelerator(gradient_accumulation_steps=4)
-device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 # device = torch.device('cpu')
 accelerator.state.device = device
 
@@ -277,7 +277,8 @@ class DetectBERTTrainer():
                 # print(sample['label'])
                 with accelerator.accumulate(self.model):
                     out = self.model(sample['lines'], labels=labels, class_weight=self.class_weight, masked=self.masked)
-                    wandb.log({'current loss': out.loss.item()})
+                    if self.log:
+                       wandb.log({'current loss': out.loss.item()})
                     total_loss += out.loss.item() 
                     accelerator.backward(out.loss)
                     self.optimizer.step()
@@ -340,7 +341,7 @@ class DetectBERTTrainer():
         preds = torch.cat(preds).to(self.device) if not self.config.func_cls else torch.tensor(preds).to(self.device)
         targets = torch.cat(targets).to(self.device) if not self.config.func_cls else torch.tensor(targets).to(self.device)
         softmax = torch.nn.Softmax(dim = 1)
-        preds_logits =softmax(torch.cat(preds_logits))
+        preds_logits = softmax(torch.cat(preds_logits))
 
         print(len(statement_types))
         print(preds.shape)
@@ -389,7 +390,7 @@ class DetectBERTTrainer():
         if self.log:
             wandb.init(
                 name=name,
-                project=f'DetectBert-C',
+                project=f'DetectBERT',
                 entity='eddiechen372',
                 reinit=True,
                 config={
@@ -586,9 +587,7 @@ if __name__ == '__main__':
     from datasets import load_dataset
 
 
-    ds = load_dataset('EddieChen372/Vudenc_with_norm_vul_lines')
-    # print(ds['train'][0])
-    ds = load_dataset('EddieChen372/Vudenc_with_norm_vul_lines')
+    ds = load_dataset('EddieChen372/CVEFixes_Python_with_norm_vul_lines')
     print(ds)
     
     # print(ds['train']['type'])
@@ -607,8 +606,8 @@ if __name__ == '__main__':
         heads=12,
         func_cls=False
     ) 
-    trainer = DetectBERTTrainer(config=config, log=False)
-    # trainer.run_train()
+    trainer = DetectBERTTrainer(config=config, log=True)
+    trainer.fit("/home/jupyter-iec_chau/DetectBERT/be/data", 'test')
     # trainer.load('/data/thesis/data/models/mpnet_cvefixes_w_masked')
     # path = '/data/thesis/data/models'
     

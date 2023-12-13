@@ -1,0 +1,152 @@
+{
+    "os": "Linux-5.15.0-91-generic-x86_64-with-glibc2.35",
+    "python": "3.10.10",
+    "heartbeatAt": "2023-12-13T13:14:07.292865",
+    "startedAt": "2023-12-13T13:14:05.759025",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/jupyter-iec_chau/DetectBERT/be/DetectBERT.py",
+    "codePathLocal": "DetectBERT.py",
+    "codePath": "be/DetectBERT.py",
+    "git": {
+        "remote": "https://github.com/ProfEddie/DetectBERT.git",
+        "commit": "2688e370d6171d98bd4d68495eebc5c2aee21f36"
+    },
+    "email": null,
+    "root": "/home/jupyter-iec_chau/DetectBERT",
+    "host": "iec-gv",
+    "username": "jupyter-iec_chau",
+    "executable": "/home/jupyter-iec_chau/DetectBERT/be/DetectBERT/bin/python",
+    "cpu_count": 10,
+    "cpu_count_logical": 20,
+    "cpu_freq": {
+        "current": 3793.15455,
+        "min": 800.0,
+        "max": 5200.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 4905.831,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 4961.585,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 4916.802,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 4802.54,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3600.0,
+            "min": 800.0,
+            "max": 5200.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 1830.2253036499023,
+            "used": 822.7280883789062
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 3080",
+    "gpu_count": 2,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3080",
+            "memory_total": 10737418240
+        },
+        {
+            "name": "NVIDIA GeForce RTX 3080 Ti",
+            "memory_total": 12884901888
+        }
+    ],
+    "memory": {
+        "total": 78.46163177490234
+    }
+}
