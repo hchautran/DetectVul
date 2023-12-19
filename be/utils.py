@@ -448,6 +448,29 @@ def normalize_code(code: str) -> str:
     code = astor.to_source(transformed)
     return code 
 
+def cast_type(sample):
+    statement_type = {
+        "[PAD]'": 0,
+        "For": 1,
+        "Expr'": 2, 
+        "Assign'": 3,
+        "Return'": 4,
+        "Assert'": 5, 
+        "Import'": 6, 
+        "AugAssign'":7,
+        "Condition": 8,
+        "Docstring": 9,
+        "AnnAssign'": 10,
+        "ImportFrom'": 11,
+        "FunctionDef'": 12,
+        "AsyncFunctionDef'": 13 
+    } 
+    type_ids = [] 
+    for type in sample['type']:
+        type_ids.append(statement_type[type])
+
+    sample['type_ids'] = torch.LongTensor(type_ids)
+    return sample
   
 def remove_comment_diff(diffs:list, comment_lines):
    for diff in diffs:
@@ -480,7 +503,7 @@ def parse_diff(sample):
       after_comment_lines = get_doc_string_pos(sample['code_after'])
       deleted_diff = list(filter(lambda item: item[1] != '' and '#' not in item[1],  diff_parsed['deleted'])) 
       added_diff = list(filter(lambda item: item[1] != '' and '#' not in item[1],  diff_parsed['added']))
-      deleted_diff =   remove_comment_diff(deleted_diff, before_comment_lines)
+      deleted_diff = remove_comment_diff(deleted_diff, before_comment_lines)
       added_diff = remove_comment_diff(added_diff, before_comment_lines) 
 
       diff_parsed ={
@@ -590,9 +613,6 @@ def get_graph_prop(graph, name_dict ,vul_lines=set() ,label=0, is_code_before=Tr
 
     for node in graph:
         if node.id not in node_map:
-            # print(node.get_source())
-            # small_div()
-            # print(node.get_normalized_source(name_dict))
 
             contents.append(node.get_source())
             normalized_contents.append(node.get_normalized_source(name_dict))

@@ -35,6 +35,23 @@ accelerator.state.device = device
 class BertForLineClassification(BertPreTrainedModel):
 
     _keys_to_ignore_on_load_unexpected = [r"pooler"]
+    statement_type = {
+        "[PAD]'": 0,
+        "For": 1,
+        "Expr'": 2, 
+        "Assign'": 3,
+        "Return'": 4,
+        "Assert'": 5, 
+        "Import'": 6, 
+
+        "AugAssign'":7,
+        "Condition": 8,
+        "Docstring": 9,
+        "AnnAssign'": 10,
+        "ImportFrom'": 11,
+        "FunctionDef'": 12,
+        "AsyncFunctionDef'": 13 
+    } 
 
     def __init__(self, config):
         super().__init__(config)
@@ -45,12 +62,16 @@ class BertForLineClassification(BertPreTrainedModel):
         )
         self.dropout = nn.Dropout(classifier_dropout)
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
+        self.type_embeddings = nn.Embedding(13, config.hidden_size, padding_idx=0)
+        
+        
 
         self.post_init()
 
     def forward(
         self,
         inputs_embeds:torch.Tensor,
+        type_ids:torch.Tensor=None,
         labels:torch.Tensor=None,
         class_weight=None,
         output_attentions: Optional[bool] = True,
@@ -60,6 +81,9 @@ class BertForLineClassification(BertPreTrainedModel):
     ): 
 
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+        if type_ids is not None:
+            inputs_embeds = inputs_embeds + self.type_embeddings(type_ids)
+            
 
         outputs = self.bert(
             inputs_embeds=inputs_embeds,
@@ -588,26 +612,29 @@ if __name__ == '__main__':
 
 
     ds = load_dataset('EddieChen372/CVEFixes_Python_with_norm_vul_lines')
+    ds = ds.map(cast_type)
     print(ds)
+    # l
+    print(ds['train'][2])
     
-    # print(ds['train']['type'])
-    model_ckt = 'sentence-transformers/all-mpnet-base-v2'
+    # # # print(ds['train']['type'])
+    # model_ckt = 'sentence-transformers/all-mpnet-base-v2'
 
-    config = DetectBERTTrainerConfig(
-        ds=ds,
-        model_ckt=model_ckt,
-        num_layers=6,
-        epoch_num=100,
-        learning_rate=1e-5,
-        device=device,
-        masked=True,
-        save_each=100,
-        architecture='mpnet',
-        heads=12,
-        func_cls=False
-    ) 
-    trainer = DetectBERTTrainer(config=config, log=True)
-    trainer.fit("/home/jupyter-iec_chau/DetectBERT/be/data", 'test')
+    # config = DetectBERTTrainerConfig(
+    #     ds=ds,
+    #     model_ckt=model_ckt,
+    #     num_layers=6,
+    #     epoch_num=100,
+    #     learning_rate=1e-5,
+    #     device=device,
+    #     masked=True,
+    #     save_each=100,
+    #     architecture='mpnet',
+    #     heads=12,
+    #     func_cls=False
+    # ) 
+    # trainer = DetectBERTTrainer(config=config, log=True)
+    # trainer.fit("/home/jupyter-iec_chau/DetectBERT/be/data", 'test')
     # trainer.load('/data/thesis/data/models/mpnet_cvefixes_w_masked')
     # path = '/data/thesis/data/models'
     
