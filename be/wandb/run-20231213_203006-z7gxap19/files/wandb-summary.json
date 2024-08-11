@@ -1,0 +1,1 @@
+{"embs num params": 109870464, "cls num params": 43322118, "_timestamp": 1702478065.5933979, "_runtime": 3859.4617989063263, "_step": 79940, "current loss": 4.7123718104558066e-05, "epoch": 17, "test f1": 0.614229142665863, "test precision": 0.5451011061668396, "test recall": 0.719514787197113, "test acc": 0.719514787197113, "train loss": 0.005426385363175676, "eval loss": 0.0}

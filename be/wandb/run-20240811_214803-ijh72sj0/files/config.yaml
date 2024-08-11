@@ -1,0 +1,60 @@
+wandb_version: 1
+
+embs_architecture:
+  desc: null
+  value: mpnet
+hidden_dim:
+  desc: null
+  value: 768
+num_layers:
+  desc: null
+  value: 3
+heads:
+  desc: null
+  value: 12
+architecture:
+  desc: null
+  value: bert
+_wandb:
+  desc: null
+  value:
+    python_version: 3.10.14
+    cli_version: 0.16.6
+    framework: huggingface
+    huggingface_version: 4.35.2
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1723387683.0
+    t:
+      1:
+      - 1
+      - 5
+      - 11
+      - 49
+      - 51
+      - 53
+      - 55
+      - 71
+      - 75
+      - 77
+      2:
+      - 1
+      - 5
+      - 11
+      - 49
+      - 51
+      - 53
+      - 55
+      - 71
+      - 75
+      - 77
+      3:
+      - 13
+      - 16
+      - 23
+      4: 3.10.14
+      5: 0.16.6
+      6: 4.35.2
+      8:
+      - 5
+      13: linux-x86_64

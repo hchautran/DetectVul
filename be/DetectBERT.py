@@ -28,7 +28,7 @@ import wandb
 import json
 
 accelerator = Accelerator(gradient_accumulation_steps=4)
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
 # device = torch.device('cpu')
 accelerator.state.device = device
 
@@ -43,7 +43,6 @@ class BertForLineClassification(BertPreTrainedModel):
         "Return'": 4,
         "Assert'": 5, 
         "Import'": 6, 
-
         "AugAssign'":7,
         "Condition": 8,
         "Docstring": 9,
@@ -485,7 +484,8 @@ class DetectBERTTrainer():
         
         
 def get_vudenc_data(mode):
-    data_path = '/root/data/VulnerabilityDetection/Code/data'
+    import os
+    data_path = f'{os.getcwd()}/data'
     with open(f"{data_path}/plain_{mode}", 'r') as infile:
         data = json.load(infile)
     files = {} 
@@ -606,6 +606,7 @@ def get_vul_df(all_files):
 
 if __name__ == '__main__': 
     import torch
+    import os 
     import pandas as pd
     from utils import *
     from datasets import load_dataset
@@ -617,24 +618,24 @@ if __name__ == '__main__':
     # l
     print(ds['train'][2])
     
-    # # # print(ds['train']['type'])
-    # model_ckt = 'sentence-transformers/all-mpnet-base-v2'
+    # # print(ds['train']['type'])
+    model_ckt = 'sentence-transformers/all-mpnet-base-v2'
 
-    # config = DetectBERTTrainerConfig(
-    #     ds=ds,
-    #     model_ckt=model_ckt,
-    #     num_layers=6,
-    #     epoch_num=100,
-    #     learning_rate=1e-5,
-    #     device=device,
-    #     masked=True,
-    #     save_each=100,
-    #     architecture='mpnet',
-    #     heads=12,
-    #     func_cls=False
-    # ) 
-    # trainer = DetectBERTTrainer(config=config, log=True)
-    # trainer.fit("/home/jupyter-iec_chau/DetectBERT/be/data", 'test')
+    config = DetectBERTTrainerConfig(
+        ds=ds,
+        model_ckt=model_ckt,
+        num_layers=3,
+        epoch_num=100,
+        learning_rate=1e-5,
+        device=device,
+        masked=True,
+        save_each=25,
+        architecture='mpnet',
+        heads=12,
+        func_cls=False
+    ) 
+    trainer = DetectBERTTrainer(config=config, log=True)
+    trainer.fit(f"{os.getcwd()}/data", 'test')
     # trainer.load('/data/thesis/data/models/mpnet_cvefixes_w_masked')
     # path = '/data/thesis/data/models'
     
@@ -642,5 +643,5 @@ if __name__ == '__main__':
     # print(trainer.push_to_hub(path, 'mpnet_cvefixes_w_masked'))
     
 
-    # trainer.evaluate()
+    trainer.evaluate()
     
