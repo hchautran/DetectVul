@@ -89,7 +89,7 @@ class DetectBERTPythonPipeline():
                 confident = []
                 label = []
                 func = self.funcs.iloc[i]
-                output = self.model(func['content'])
+                output = self.model(func['normalized_content'])
                 logits = output.logits[0]
                 softmax = nn.Softmax(dim=1) 
                 normalized_logits = softmax(logits)
@@ -125,12 +125,12 @@ def read_file(path):
 
 
 if __name__ == '__main__':
-    model_path = '/Users/chautran/vuldectector/be/DetectBERT/models/all-MiniLM-L12-v2-bert-L6-vudenc-masked'
-    embs_model_arch = 'sentence-transformers/all-MiniLM-L12-v2'
-    model_name = 'all_MiniLM-L12-v2-bert-L6-vudenc-masked'
+    import os
+    model_path = f'{os.getcwd()}/data/models/mpnet_cvefixes_w_masked'
+    embs_model_arch = f'sentence-transformers/all-MiniLM-L12-v2'
     model = DetectBERT(embs_model_arch, num_labels=len(vul_dict) + 1) 
     model.from_pretrained(model_path)
-    source_path = '/Users/chautran/vuldectector/examples/sql-2.py'
+    source_path = f'/home/jupyter-iec_chau/DetectBERT/examples/sql-2'
     source = read_file(source_path)
     print_with_lines(source)
     pipeline = DetectBERTPythonPipeline(model, source)

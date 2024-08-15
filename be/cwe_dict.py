@@ -1,6 +1,6 @@
 vul_dict = {
    1: dict(
-      id='CWE-200',
+      id='CWE-22',
       url='https://cwe.mitre.org/data/definitions/200.html', 
       name='path disclosure', 
    ),
@@ -12,7 +12,7 @@ vul_dict = {
    3: dict(
       id='CWE-79',
       url='https://cwe.mitre.org/data/definitions/79.html', 
-      name='cross site scripting', 
+      name='cross site scripting',  
    ),
    4: dict(
       id ='CWE-89', 

@@ -61,7 +61,7 @@ class BertForLineClassification(BertPreTrainedModel):
         )
         self.dropout = nn.Dropout(classifier_dropout)
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
-        self.type_embeddings = nn.Embedding(13, config.hidden_size, padding_idx=0)
+        # self.type_embeddings = nn.Embedding(13, config.hidden_size, padding_idx=0)
         
         
 
@@ -80,8 +80,9 @@ class BertForLineClassification(BertPreTrainedModel):
     ): 
 
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        if type_ids is not None:
-            inputs_embeds = inputs_embeds + self.type_embeddings(type_ids)
+        # if type_ids is not None:
+            # print('got here')
+            # inputs_embeds = inputs_embeds + self.type_embeddings(type_ids)
             
 
         outputs = self.bert(
@@ -183,6 +184,7 @@ class DetectBERT(nn.Module):
     def __init__(self, embs_model_ckt:str, num_labels:int, num_hidden_layers=6, max_lines=1024, heads=12 ,func_cls=False):
         super(DetectBERT, self).__init__()
         self.embs_model, self.tokenizer = get_model_and_tokenizer(embs_model_ckt)
+        print(device)
         self.embs_model = self.embs_model.to(device)
         config = BertConfig(
             vocab_size=1,
@@ -224,6 +226,8 @@ class DetectBERT(nn.Module):
 
         if masked:
           attention_mask = torch.where(input_ids < self.tokenizer.vocab_size, attention_mask, 0).to(device)
+        self.embs_model = self.embs_model.to(device)
+        self.model = self.model.to(device)
         
 
         embs_out = self.embs_model(input_ids=input_ids, attention_mask=attention_mask) 
@@ -310,7 +314,6 @@ class DetectBERTTrainer():
         return total_loss/total_step
  
     def run_test(self, threshold=0.5, average='macro', eval_valid=False):
-        print(device)
         self.model = self.model.to(device)
         self.model.eval()
         if self.num_classes > 2:
@@ -352,7 +355,8 @@ class DetectBERTTrainer():
 
         with torch.no_grad():
             for i in tqdm(range(len(ds))):  
-                    sample = ds[i]
+                sample = ds[i]
+                if not all(x == 0 for x in sample['label']):
                     labels = torch.LongTensor(sample['label']).to(device)
                     out = self.model(sample['lines'], labels ,class_weight=self.class_weight.to(device))
                     preds.append(out.logits[0].argmax(dim=1))
@@ -366,9 +370,7 @@ class DetectBERTTrainer():
         softmax = torch.nn.Softmax(dim = 1)
         preds_logits = softmax(torch.cat(preds_logits))
 
-        print(len(statement_types))
-        print(preds.shape)
-        print(targets.shape)
+
         
         for i, statement in enumerate(statement_types): 
             statement_type[statement[:len(statement)]][0].append(preds[i])
@@ -377,32 +379,57 @@ class DetectBERTTrainer():
 
 
 
-        for key in statement_type:
-
-            try:
-                p = torch.tensor(statement_type[key][0]).to(device)
-                t = torch.tensor(statement_type[key][1]).to(device)
-                logits = torch.cat(statement_type[key][2],0).to(device)
-                print(f'{key} & {len(statement_type[key][0])} & {f1(p, t)*100:2f} & {mcc(p, t):4b} & {aucroc(logits, t)*100:2f}\\\\')
-            except:
-                print(key)
-
-
         if average == 'none':
             print(f1(preds, targets))
-            print(precision(preds, targets)) 
-            print(recall(preds, targets))
-            print(aucroc(preds_logits.to(device), targets))
-            print(mcc(preds, targets))
+            # print(precision(preds, targets)) 
+            # print(recall(preds, targets))
+            # print(aucroc(preds_logits.to(device), targets))
+            # print(mcc(preds, targets))
             return preds.tolist(), targets.tolist(), statement_type   
 
-        return  (
-            total_loss/len(ds),
-            f1(preds, targets).item(), 
-            precision(preds, targets).item(), 
-            recall(preds, targets).item(),
-            acc(preds, targets).item(),
-        )
+        return  {
+            'f1':f1(preds, targets).item(), 
+            'prec':precision(preds, targets).item(), 
+            'recall':recall(preds, targets).item(),
+            'acc':acc(preds, targets).item(),
+        }
+    
+    def predict(self, sample):
+        self.model.eval()
+        out = {} 
+        
+        with torch.no_grad():
+            vul_lines = []
+            confident = []
+            label = []
+            output = self.model(sample['lines'])
+            print(sample)
+            logits = output.logits[0]
+            softmax = nn.Softmax(dim=1) 
+            normalized_logits = softmax(logits)
+            preds = normalized_logits.argmax(dim=1)
+            attentions =  output.attentions
+            for i in range(len(preds)):
+                if preds[i] != 0:
+                    print('label:', preds[i].item())
+                    print('confident:', normalized_logits[i][preds[i]].item())
+                    print(i, sample['lines'][i])
+                    out = {
+                        'confident': normalized_logits[i][preds[i]].item(),
+                        'label': preds[i].item(), 
+                        'attentions': attentions,
+                        'content': sample['lines'],
+                        'truth': sample['label'][i]
+                    }
+
+                vul_lines.append(sample['lines'][i])
+                confident.append(normalized_logits[i][preds[i]].item())
+                label.append(preds[i].item())
+                div()
+            
+
+        return out
+
 
     
     def fit(self,data_path, name ):
@@ -452,7 +479,7 @@ class DetectBERTTrainer():
                     'eval loss': eval_loss
                 })
         
-    def evaluate(self, average='none'):
+    def evaluate(self, average='macro'):
         self.model, self.scheduler, self.optimizer = accelerator.prepare(
             self.model, self.scheduler, self.optimizer
         )
@@ -460,7 +487,7 @@ class DetectBERTTrainer():
         cls_num_params = sum(p.numel() for p in self.model.model.parameters() if p.requires_grad)
         print('embs num params:', emb_num_params) 
         print('cls num params:', cls_num_params) 
-        self.run_test(average=average, eval_valid=True)
+        return self.run_test(average=average, eval_valid=True)
 
     def push_to_hub(self, path, name):
         from huggingface_hub import HfApi
@@ -635,13 +662,14 @@ if __name__ == '__main__':
         func_cls=False
     ) 
     trainer = DetectBERTTrainer(config=config, log=True)
-    trainer.fit(f"{os.getcwd()}/data", 'test')
-    # trainer.load('/data/thesis/data/models/mpnet_cvefixes_w_masked')
+    # trainer.fit(f"{os.getcwd()}/data", 'test')
+    trainer.load(f'{os.getcwd()}/data/DetectBERT/models/mpnet_cvefixes_w_masked')
+    # trainer.load(f'{os.getcwd()}/data/test_epoch_25')
     # path = '/data/thesis/data/models'
     
    
     # print(trainer.push_to_hub(path, 'mpnet_cvefixes_w_masked'))
     
 
-    trainer.evaluate()
+    print(trainer.evaluate())
     
