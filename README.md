@@ -1,5 +1,6 @@
 # DetectVul
 This repository is still undergoing refactoring
+Original Paper: https://www.sciencedirect.com/science/article/abs/pii/S0167739X24004680
 
 
 ## Getting started
@@ -30,9 +31,7 @@ Folder `examples` contain Python source files that contain vulnerabilities which
 
 ### Bibtex
 
-Original Paper: https://www.sciencedirect.com/science/article/abs/pii/S0167739X24004680
 
-bibtex
 
 ```
 @article{TRAN2024107504,
